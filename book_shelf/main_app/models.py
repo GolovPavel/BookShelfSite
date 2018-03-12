@@ -1,5 +1,8 @@
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
+
 from book_shelf.settings import MEDIA_ROOT
 import os
 
@@ -47,10 +50,43 @@ class Note(models.Model):
     created_at = models.DateTimeField(auto_now = True)
 
 class Like(models.Model):
-    pass
+    from_user = models.ForeignKey(
+        User,
+        blank = True,
+        null = True,
+        on_delete = models.SET_NULL
+    )
+    created_at = models.DateTimeField(auto_now = True)
+    content_type = models.ForeignKey(
+        ContentType,
+        blank = True,
+        null = True,
+        on_delete = models.SET_NULL
+    )
+    object_id = models.PositiveIntegerField()
+    content_object = GenericForeignKey('content_type', 'object_id')
+
+    class Meta:
+        unique_together = ('from_user', 'object_id')
+
 
 class Comment(models.Model):
-    pass
+    from_user = models.ForeignKey(
+        User,
+        blank = True,
+        null = True,
+        on_delete = models.SET_NULL
+    )
+    coment_text = models.TextField()
+    created_at = models.DateTimeField(auto_now = True)
+    content_type = models.ForeignKey(
+        ContentType,
+        blank = True,
+        null = True,
+        on_delete = models.SET_NULL
+    )
+    object_id = models.PositiveIntegerField()
+    content_object = GenericForeignKey('content_type', 'object_id')
 
 class Book_rating(models.Model):
     book = models.ForeignKey(
