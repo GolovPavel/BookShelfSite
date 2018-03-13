@@ -14,6 +14,9 @@ class User(models.Model):
     reg_date = models.DateTimeField(auto_now = True)
     password = models.CharField(max_length = 124)
 
+    def __str__(self):
+        return self.username
+
 class Book(models.Model):
     title = models.CharField(
         max_length = 255,
@@ -32,6 +35,9 @@ class Book(models.Model):
     created_at = models.DateTimeField(auto_now = True)
     is_public = models.BooleanField(default = False)
 
+    def __str__(self):
+        return self.title
+
 class Note(models.Model):
     title = models.CharField(max_length = 1024)
     note_text =  models.TextField()
@@ -48,6 +54,9 @@ class Note(models.Model):
         on_delete = models.SET_NULL
     )
     created_at = models.DateTimeField(auto_now = True)
+
+    def __str__(self):
+        return "{} for book {}".format(self.title, self.book)
 
 class Like(models.Model):
     from_user = models.ForeignKey(
@@ -69,6 +78,9 @@ class Like(models.Model):
     class Meta:
         unique_together = ('from_user', 'object_id')
 
+    def __str__(self):
+        return "from user {} for object {}".format(self.from_user, self.object_id)
+
 
 class Comment(models.Model):
     from_user = models.ForeignKey(
@@ -87,6 +99,10 @@ class Comment(models.Model):
     )
     object_id = models.PositiveIntegerField()
     content_object = GenericForeignKey('content_type', 'object_id')
+
+    def __str__(self):
+        return "from user {} for object {}".format(self.from_user, self.object_id)
+
 
 class Book_rating(models.Model):
     book = models.ForeignKey(
@@ -109,6 +125,10 @@ class Book_rating(models.Model):
     class Meta:
         unique_together = ('book', 'from_user')
 
+    def __str__(self):
+        return "from user {} for book {}".format(self.from_user, self.book)
+
+
 class User_to_book(models.Model):
     book = models.ForeignKey(
         Book,
@@ -126,3 +146,6 @@ class User_to_book(models.Model):
 
     class Meta:
         unique_together = ('book', 'user')
+
+    def __str__(self):
+        return "user: {}, book: {}".format(self.user, self.book)
