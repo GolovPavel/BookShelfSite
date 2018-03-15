@@ -2,20 +2,10 @@ from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
+from django.conf import settings
 
 from book_shelf.settings import MEDIA_ROOT
 import os
-
-class User(models.Model):
-    username = models.CharField(
-        max_length = 64,
-        unique = True
-    )
-    reg_date = models.DateTimeField(auto_now = True)
-    password = models.CharField(max_length = 124)
-
-    def __str__(self):
-        return self.username
 
 class Book(models.Model):
     title = models.CharField(
@@ -40,7 +30,7 @@ class Book(models.Model):
 
 class Note(models.Model):
     title = models.CharField(max_length = 1024)
-    note_text =  models.TextField()
+    note_text = models.TextField()
     book = models.ForeignKey(
         Book,
         blank = True,
@@ -48,7 +38,7 @@ class Note(models.Model):
         on_delete = models.SET_NULL
     )
     user = models.ForeignKey(
-        User,
+        settings.AUTH_USER_MODEL,
         blank = True,
         null = True,
         on_delete = models.SET_NULL
@@ -60,7 +50,7 @@ class Note(models.Model):
 
 class Like(models.Model):
     from_user = models.ForeignKey(
-        User,
+        settings.AUTH_USER_MODEL,
         blank = True,
         null = True,
         on_delete = models.SET_NULL
@@ -84,7 +74,7 @@ class Like(models.Model):
 
 class Comment(models.Model):
     from_user = models.ForeignKey(
-        User,
+        settings.AUTH_USER_MODEL,
         blank = True,
         null = True,
         on_delete = models.SET_NULL
@@ -112,7 +102,7 @@ class Book_rating(models.Model):
         on_delete = models.SET_NULL
     )
     from_user = models.ForeignKey(
-        User,
+        settings.AUTH_USER_MODEL,
         blank = True,
         null = True,
         on_delete = models.SET_NULL
@@ -137,7 +127,7 @@ class User_to_book(models.Model):
         on_delete = models.SET_NULL
     )
     user = models.ForeignKey(
-        User,
+        settings.AUTH_USER_MODEL,
         blank = True,
         null = True,
         on_delete = models.SET_NULL
