@@ -10,7 +10,6 @@ import os
 class Book(models.Model):
     title = models.CharField(
         max_length = 255,
-        unique = True
     )
     picture = models.ImageField(
         upload_to = "pictures/book_covers/",
@@ -79,7 +78,7 @@ class Comment(models.Model):
         null = True,
         on_delete = models.SET_NULL
     )
-    coment_text = models.TextField()
+    comment_text = models.TextField()
     created_at = models.DateTimeField(auto_now = True)
     content_type = models.ForeignKey(
         ContentType,

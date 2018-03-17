@@ -80,6 +80,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'OPTIONS': {
+            'init_command': 'SET foreign_key_checks = 0;',
             'read_default_file': 'book_shelf/db.cnf',
         },
     }
