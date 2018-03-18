@@ -27,6 +27,15 @@ class Book(models.Model):
     def __str__(self):
         return self.title
 
+    class Meta:
+        #Indexes for and searching ordering data
+        indexes = [
+            #Indexes for ordering and searching
+            models.Index(fields=['title']),
+            #Index for ordering
+            models.Index(fields=['created_at'])
+        ]
+
 class Note(models.Model):
     title = models.CharField(max_length = 1024)
     note_text = models.TextField()
@@ -46,6 +55,12 @@ class Note(models.Model):
 
     def __str__(self):
         return "{} for book {}".format(self.title, self.book)
+
+    class Meta:
+        indexes = [
+            #Index for ordering
+            models.Index(fields=['created_at'])
+        ]
 
 class Like(models.Model):
     from_user = models.ForeignKey(
@@ -70,7 +85,6 @@ class Like(models.Model):
     def __str__(self):
         return "from user {} for object {}".format(self.from_user, self.object_id)
 
-
 class Comment(models.Model):
     from_user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -92,6 +106,11 @@ class Comment(models.Model):
     def __str__(self):
         return "from user {} for object {}".format(self.from_user, self.object_id)
 
+    class Meta:
+        indexes = [
+            #Together index for fast searching
+            models.Index(fields=['from_user', 'content_type', 'object_id', 'created_at'])
+        ]
 
 class Book_rating(models.Model):
     book = models.ForeignKey(
@@ -116,7 +135,6 @@ class Book_rating(models.Model):
 
     def __str__(self):
         return "from user {} for book {}".format(self.from_user, self.book)
-
 
 class User_to_book(models.Model):
     book = models.ForeignKey(
