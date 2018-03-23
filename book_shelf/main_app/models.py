@@ -7,6 +7,7 @@ from django.conf import settings
 from book_shelf.settings import MEDIA_ROOT
 import os
 
+
 class Book(models.Model):
     title = models.CharField(
         max_length = 255,
@@ -21,8 +22,12 @@ class Book(models.Model):
         )
     )
     description =  models.TextField()
-    created_at = models.DateTimeField(auto_now = True)
+    created_at = models.DateTimeField(auto_now_add = True)
     is_public = models.BooleanField(default = False)
+    users = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        through='UserToBook'
+    )
 
     def __str__(self):
         return self.title
@@ -33,25 +38,26 @@ class Book(models.Model):
             #Indexes for ordering and searching
             models.Index(fields=['title']),
             #Index for ordering
-            models.Index(fields=['created_at'])
+            models.Index(fields=['created_at']),
+            #index for where condition
+            models.Index(fields=['is_public']),
         ]
+
+        verbose_name = "Book"
+        verbose_name_plural = "Books"
 
 class Note(models.Model):
     title = models.CharField(max_length = 1024)
     note_text = models.TextField()
     book = models.ForeignKey(
         Book,
-        blank = True,
-        null = True,
-        on_delete = models.SET_NULL
+        on_delete = models.CASCADE
     )
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
-        blank = True,
-        null = True,
-        on_delete = models.SET_NULL
+        on_delete = models.CASCADE
     )
-    created_at = models.DateTimeField(auto_now = True)
+    created_at = models.DateTimeField(auto_now_add = True)
 
     def __str__(self):
         return "{} for book {}".format(self.title, self.book)
@@ -62,6 +68,9 @@ class Note(models.Model):
             models.Index(fields=['created_at'])
         ]
 
+        verbose_name = "Note"
+        verbose_name_plural = "Notes"
+
 class Like(models.Model):
     from_user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -69,7 +78,7 @@ class Like(models.Model):
         null = True,
         on_delete = models.SET_NULL
     )
-    created_at = models.DateTimeField(auto_now = True)
+    created_at = models.DateTimeField(auto_now_add = True)
     content_type = models.ForeignKey(
         ContentType,
         blank = True,
@@ -82,6 +91,9 @@ class Like(models.Model):
     class Meta:
         unique_together = ('from_user', 'object_id')
 
+        verbose_name = "Like"
+        verbose_name_plural = "Likes"
+
     def __str__(self):
         return "from user {} for object {}".format(self.from_user, self.object_id)
 
@@ -93,7 +105,7 @@ class Comment(models.Model):
         on_delete = models.SET_NULL
     )
     comment_text = models.TextField()
-    created_at = models.DateTimeField(auto_now = True)
+    created_at = models.DateTimeField(auto_now_add = True)
     content_type = models.ForeignKey(
         ContentType,
         blank = True,
@@ -109,10 +121,13 @@ class Comment(models.Model):
     class Meta:
         indexes = [
             #Together index for fast searching
-            models.Index(fields=['from_user', 'content_type', 'object_id', 'created_at'])
+            models.Index(fields=['content_type', 'object_id', 'created_at'])
         ]
 
-class Book_rating(models.Model):
+        verbose_name = "Comment"
+        verbose_name_plural = "Comments"
+
+class BookRating(models.Model):
     book = models.ForeignKey(
         Book,
         blank = True,
@@ -133,26 +148,29 @@ class Book_rating(models.Model):
     class Meta:
         unique_together = ('book', 'from_user')
 
+        verbose_name = "Book rating"
+        verbose_name_plural = "Books rating"
+
     def __str__(self):
         return "from user {} for book {}".format(self.from_user, self.book)
 
-class User_to_book(models.Model):
+#Intermediate model
+class UserToBook(models.Model):
     book = models.ForeignKey(
         Book,
-        blank = True,
-        null = True,
-        on_delete = models.SET_NULL
+        on_delete = models.CASCADE
     )
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
-        blank = True,
-        null = True,
-        on_delete = models.SET_NULL
+        on_delete = models.CASCADE
     )
     is_public = models.BooleanField(default = True)
 
     class Meta:
         unique_together = ('book', 'user')
+
+        verbose_name = "Book of user"
+        verbose_name_plural = "Books of users"
 
     def __str__(self):
         return "user: {}, book: {}".format(self.user, self.book)

@@ -3,8 +3,8 @@ from main_app.models import Book
 from main_app.models import Note
 from main_app.models import Like
 from main_app.models import Comment
-from main_app.models import Book_rating
-from main_app.models import User_to_book
+from main_app.models import BookRating
+from main_app.models import UserToBook
 from django.db.utils import IntegrityError
 
 import time
@@ -29,6 +29,7 @@ def delete_all_data():
 
 generator = Generic()
 
+#bulk create second parameter
 def generate_users(count = 100000):
     buffer = []
     print("Adding {} users to db...".format(count))
@@ -49,12 +50,14 @@ def generate_users(count = 100000):
             add_to_db = 0
 
     global users
+    #values list flat = true
     users = [
         user['id'] for user in [
             id for id in User.objects.all().values('id')
         ]
     ]
 
+#get id's instead objects Contenttype.get_for_object
 def generate_books(count = 100000):
     buffer = []
     print("Adding {} books to db...".format(count))

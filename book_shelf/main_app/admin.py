@@ -4,8 +4,8 @@ from main_app.models import Book
 from main_app.models import Note
 from main_app.models import Like
 from main_app.models import Comment
-from main_app.models import Book_rating
-from main_app.models import User_to_book
+from main_app.models import BookRating
+from main_app.models import UserToBook
 
 # Register your models here.
 
@@ -21,15 +21,15 @@ class LikeAdmin(admin.ModelAdmin):
 class CommentAdmin(admin.ModelAdmin):
     pass
 
-class Book_ratingAdmin(admin.ModelAdmin):
+class BookRatingAdmin(admin.ModelAdmin):
     pass
 
-class User_to_bookAdmin(admin.ModelAdmin):
+class UserToBookAdmin(admin.ModelAdmin):
     pass
 
 admin.site.register(Book, BookAdmin)
 admin.site.register(Note, NoteAdmin)
 admin.site.register(Like, LikeAdmin)
 admin.site.register(Comment, CommentAdmin)
-admin.site.register(Book_rating, Book_ratingAdmin)
-admin.site.register(User_to_book, User_to_bookAdmin)
+admin.site.register(BookRating, BookRatingAdmin)
+admin.site.register(UserToBook, UserToBookAdmin)
