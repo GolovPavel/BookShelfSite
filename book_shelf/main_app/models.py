@@ -89,7 +89,7 @@ class Like(models.Model):
     content_object = GenericForeignKey('content_type', 'object_id')
 
     class Meta:
-        unique_together = ('from_user', 'object_id')
+        unique_together = ('from_user', 'content_type', 'object_id')
 
         verbose_name = "Like"
         verbose_name_plural = "Likes"
@@ -130,9 +130,7 @@ class Comment(models.Model):
 class BookRating(models.Model):
     book = models.ForeignKey(
         Book,
-        blank = True,
-        null = True,
-        on_delete = models.SET_NULL
+        on_delete = models.CASCADE
     )
     from_user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -154,7 +152,7 @@ class BookRating(models.Model):
     def __str__(self):
         return "from user {} for book {}".format(self.from_user, self.book)
 
-#Intermediate model
+
 class UserToBook(models.Model):
     book = models.ForeignKey(
         Book,

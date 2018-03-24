@@ -6,35 +6,40 @@ from main_app.models import Comment
 from main_app.models import BookRating
 from main_app.models import UserToBook
 from django.db.utils import IntegrityError
+from django.contrib.contenttypes.models import ContentType
 
 import time
 import random
-from mimesis import Generic, Person
+from mimesis import Generic
 
 users = []
 books = []
 notes = []
 comments = []
 
-#TODO add butch delete (4000 notes per time)
+BATCH_SIZE = 2000
+
+books_content_id = ContentType.objects.get_for_model(Book).id
+notes_content_id = ContentType.objects.get_for_model(Note).id
+comments_content_id = ContentType.objects.get_for_model(Comment).id
+
+generator = Generic()
+
+
 def delete_all_data():
     print("Removing all data from db...")
-    User.objects.filter().delete()
+    User.objects.filter(is_superuser = False).delete()
     Book.objects.all().delete()
     Note.objects.all().delete()
     Like.objects.all().delete()
     Comment.objects.all().delete()
-    Book_rating.objects.all().delete()
-    User_to_book.objects.all().delete()
+    BookRating.objects.all().delete()
+    UserToBook.objects.all().delete()
 
-generator = Generic()
 
-#bulk create second parameter
 def generate_users(count = 100000):
     buffer = []
     print("Adding {} users to db...".format(count))
-
-    add_to_db = 0
 
     for _ in range(count):
         user = User(
@@ -42,27 +47,17 @@ def generate_users(count = 100000):
             password = generator.cryptographic.hash(),
         )
         buffer.append(user)
-        add_to_db += 1
 
-        if add_to_db >= 2000:
-            User.objects.bulk_create(buffer)
-            buffer.clear()
-            add_to_db = 0
+    User.objects.bulk_create(buffer, BATCH_SIZE)
 
     global users
-    #values list flat = true
-    users = [
-        user['id'] for user in [
-            id for id in User.objects.all().values('id')
-        ]
-    ]
+    users = User.objects.values_list('id', flat = True)
 
-#get id's instead objects Contenttype.get_for_object
+
+
 def generate_books(count = 100000):
     buffer = []
     print("Adding {} books to db...".format(count))
-
-    add_to_db = 0
 
     for _ in range(count):
         book = Book(
@@ -73,15 +68,11 @@ def generate_books(count = 100000):
             is_public = generator.development.boolean()
         )
         buffer.append(book)
-        add_to_db += 1
 
-        if add_to_db >= 2000:
-            Book.objects.bulk_create(buffer)
-            buffer.clear()
-            add_to_db = 0
+    Book.objects.bulk_create(buffer, BATCH_SIZE)
 
     global books;
-    books = list(Book.objects.all())
+    books = Book.objects.values_list('id', flat = True)
 
 def generate_notes(count = 100000):
     buffer = []
@@ -90,26 +81,21 @@ def generate_notes(count = 100000):
     users_len = len(users)
     books_len = len(books)
 
-    add_to_db = 0
-
     for _ in range(count):
         note = Note(
             title = generator.text.title() + str(generator.numbers.between(-10000, 10000)),
             note_text = generator.text.text(),
-            book = books[random.randint(0, books_len - 1)],
+            book_id = books[random.randint(0, books_len - 1)],
             user_id = users[random.randint(0, users_len - 1)],
             created_at = generator.datetime.datetime(),
         )
         buffer.append(note)
-        add_to_db += 1
 
-        if add_to_db >= 2000:
-            Note.objects.bulk_create(buffer)
-            buffer.clear()
-            add_to_db = 0
+    Note.objects.bulk_create(buffer, BATCH_SIZE)
 
     global notes
-    notes = list(Note.objects.all())
+    notes = Note.objects.values_list('id', flat = True)
+
 
 def generate_comments(count = 100000):
     buffer = []
@@ -119,31 +105,31 @@ def generate_comments(count = 100000):
     notes_len = len(notes)
     books_len = len(books)
 
-    add_to_db = 0
-
     for _ in range(count):
         obj_type = random.randint(1, 2)
+        user_id = users[random.randint(0, users_len - 1)]
+
+        if (obj_type == 1):
+            content_type_id = books_content_id;
+            object_id = books[random.randint(0, books_len - 1)]
+        else:
+            content_type_id = notes_content_id;
+            object_id = notes[random.randint(0, notes_len - 1)]
+
         comment = Comment(
-            from_user_id = users[random.randint(0, users_len - 1)],
+            from_user_id = user_id,
             comment_text = generator.text.text(),
+            content_type_id = content_type_id,
+            object_id = object_id,
             created_at = generator.datetime.datetime(),
         )
 
-        if (obj_type == 1):
-            comment.content_object = books[random.randint(0, books_len - 1)]
-        else:
-            comment.content_object = notes[random.randint(0, notes_len - 1)]
-
         buffer.append(comment)
-        add_to_db += 1
 
-        if add_to_db >= 2000:
-            Comment.objects.bulk_create(buffer)
-            buffer.clear()
-            add_to_db = 0
+    Comment.objects.bulk_create(buffer, BATCH_SIZE)
 
     global comments
-    comments = list(Comment.objects.all())
+    comments = Comment.objects.values_list('id', flat = True)
 
 def generate_likes(count = 100000):
     buffer = []
@@ -153,102 +139,131 @@ def generate_likes(count = 100000):
     notes_len = len(notes)
     comments_len = len(comments)
 
-    add_to_db = 0
-
     for _ in range(count):
         obj_type = random.randint(1, 2)
+        user_id = users[random.randint(0, users_len - 1)]
+
+        if (obj_type == 1):
+            content_type_id = comments_content_id;
+            object_id = comments[random.randint(0, comments_len - 1)]
+        else:
+            content_type_id = notes_content_id;
+            object_id = notes[random.randint(0, notes_len - 1)]
+
         like = Like(
-            from_user_id = users[random.randint(0, users_len - 1)],
+            from_user_id = user_id,
+            content_type_id = content_type_id,
+            object_id = object_id,
             created_at = generator.datetime.datetime(),
         )
 
-        if (obj_type == 1):
-            like.content_object = comments[random.randint(0, comments_len - 1)]
-        else:
-            like.content_object = notes[random.randint(0, notes_len - 1)]
-
         buffer.append(like)
-        add_to_db += 1
 
-        if add_to_db >= 2000:
+
+        if len(buffer) == 2000:
             try:
                 Like.objects.bulk_create(buffer)
-            except IntegrityError:
-                print("Duplicates generated, 2000 likes not generated")
-            buffer.clear()
-            add_to_db = 0
+                buffer.clear()
+            except:
+                print("Can't add 2000 likes becouse duplicate detected")
 
-def generate_book_rating(count = 100000):
+    try:
+        Like.objects.bulk_create(buffer)
+    except:
+        print("Can't add 2000 likes becouse duplicate detected")
+
+
+def generate_bookRating(count = 100000):
     buffer = []
-    print("Adding {} book_rating to db...".format(count))
+    print("Adding {} bookRating to db...".format(count))
 
     users_len = len(users)
     books_len = len(books)
 
-    add_to_db = 0
-
     for _ in range(count):
-        rating = Book_rating(
-            book = books[random.randint(0, books_len - 1)],
-            from_user_id = users[random.randint(0, users_len - 1)],
+        user_id = users[random.randint(0, users_len - 1)]
+        book_id = books[random.randint(0, books_len - 1)]
+
+        rating = BookRating(
+            book_id = book_id,
+            from_user_id = user_id,
             rating = generator.numbers.between(1, 5)
         )
 
         buffer.append(rating)
-        add_to_db += 1
 
-        if add_to_db >= 2000:
+        if len(buffer) == 2000:
             try:
-                Book_rating.objects.bulk_create(buffer)
-            except IntegrityError:
-                print("Duplicates generated, 2000 book_rating not generated")
+                BookRating.objects.bulk_create(buffer)
+                buffer.clear()
+            except:
+                print("Can't add 2000 bookRatings becouse duplicate detected")
 
-            buffer.clear()
-            add_to_db = 0
+    try:
+        BookRating.objects.bulk_create(buffer)
+    except:
+        print("Can't add 2000 bookRatings becouse duplicate detected")
 
-def generate_user_to_book(count = 100000):
+
+
+
+def generate_userToBook(count = 100000):
     buffer = []
-    print("Adding {} user_to_book to db...".format(count))
+    print("Adding {} userToBook to db...".format(count))
 
     users_len = len(users)
     books_len = len(books)
 
-    add_to_db = 0
-
     for _ in range(count):
-        user_to_book = User_to_book(
-            book = books[random.randint(0, books_len - 1)],
-            user_id = users[random.randint(0, users_len - 1)],
+        user_id = users[random.randint(0, users_len - 1)]
+        book_id = books[random.randint(0, books_len - 1)]
+
+        user_to_book = UserToBook(
+            book_id = book_id,
+            user_id = user_id,
             is_public = generator.development.boolean()
         )
 
         buffer.append(user_to_book)
-        add_to_db += 1
 
-        if add_to_db >= 2000:
+        if len(buffer) == 2000:
             try:
-                User_to_book.objects.bulk_create(buffer)
-            except IntegrityError:
-                print("Duplicates generated, 2000 user_to_book not generated")
+                UserToBook.objects.bulk_create(buffer)
+                buffer.clear()
+            except:
+                print("Can't add 2000 userToBook becouse duplicate detected")
 
-            buffer.clear()
-            add_to_db = 0
-
+    try:
+        UserToBook.objects.bulk_create(buffer)
+    except:
+        print("Can't add 2000 userToBook becouse duplicate detected")
 
 
 def get_unique_username():
     return generator.person.username() + str(generator.numbers.between(-10000, 10000))
 
 
-def generate_data(count = 100000):
+def generate_data(count = 1000):
     delete_all_data()
 
     start_time = time.time()
     generate_users(count)
+    print("--- %s seconds ---" % (time.time() - start_time))
+    start_time = time.time()
     generate_books(count)
+    print("--- %s seconds ---" % (time.time() - start_time))
+    start_time = time.time()
     generate_notes(count)
+    print("--- %s seconds ---" % (time.time() - start_time))
+    start_time = time.time()
     generate_comments(count)
+    print("--- %s seconds ---" % (time.time() - start_time))
+    start_time = time.time()
     generate_likes(count)
-    generate_book_rating(count)
-    generate_user_to_book(count)
+    print("--- %s seconds ---" % (time.time() - start_time))
+    start_time = time.time()
+    generate_bookRating(count)
+    print("--- %s seconds ---" % (time.time() - start_time))
+    start_time = time.time()
+    generate_userToBook(count)
     print("--- %s seconds ---" % (time.time() - start_time))
