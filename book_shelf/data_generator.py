@@ -37,7 +37,7 @@ def delete_all_data():
     UserToBook.objects.all().delete()
 
 
-def generate_users(count = 100000):
+def generate_users(count):
     buffer = []
     print("Adding {} users to db...".format(count))
 
@@ -50,12 +50,12 @@ def generate_users(count = 100000):
 
     User.objects.bulk_create(buffer, BATCH_SIZE)
 
-    global users
     users = User.objects.values_list('id', flat = True)
+    return users
 
 
 
-def generate_books(count = 100000):
+def generate_books(count):
     buffer = []
     print("Adding {} books to db...".format(count))
 
@@ -71,10 +71,10 @@ def generate_books(count = 100000):
 
     Book.objects.bulk_create(buffer, BATCH_SIZE)
 
-    global books;
     books = Book.objects.values_list('id', flat = True)
+    return books
 
-def generate_notes(count = 100000):
+def generate_notes(count, users, books):
     buffer = []
     print("Adding {} notes to db...".format(count))
 
@@ -93,11 +93,11 @@ def generate_notes(count = 100000):
 
     Note.objects.bulk_create(buffer, BATCH_SIZE)
 
-    global notes
     notes = Note.objects.values_list('id', flat = True)
+    return notes
 
 
-def generate_comments(count = 100000):
+def generate_comments(count, users, books, notes):
     buffer = []
     print("Adding {} comments to db...".format(count))
 
@@ -128,10 +128,10 @@ def generate_comments(count = 100000):
 
     Comment.objects.bulk_create(buffer, BATCH_SIZE)
 
-    global comments
     comments = Comment.objects.values_list('id', flat = True)
+    return comments
 
-def generate_likes(count = 100000):
+def generate_likes(count, users, notes, comments):
     buffer = []
     print("Adding {} likes to db...".format(count))
 
@@ -173,7 +173,7 @@ def generate_likes(count = 100000):
         print("Can't add 2000 likes becouse duplicate detected")
 
 
-def generate_bookRating(count = 100000):
+def generate_bookRating(count, users, books):
     buffer = []
     print("Adding {} bookRating to db...".format(count))
 
@@ -207,7 +207,7 @@ def generate_bookRating(count = 100000):
 
 
 
-def generate_userToBook(count = 100000):
+def generate_userToBook(count, users, books):
     buffer = []
     print("Adding {} userToBook to db...".format(count))
 
@@ -244,26 +244,36 @@ def get_unique_username():
 
 
 def generate_data(count = 1000):
-    delete_all_data()
+    # delete_all_data()
+
+    start_all = time.time()
 
     start_time = time.time()
-    generate_users(count)
+    users = generate_users(count)
     print("--- %s seconds ---" % (time.time() - start_time))
+
     start_time = time.time()
-    generate_books(count)
+    books = generate_books(count)
     print("--- %s seconds ---" % (time.time() - start_time))
+
     start_time = time.time()
-    generate_notes(count)
+    notes = generate_notes(count, users, books)
     print("--- %s seconds ---" % (time.time() - start_time))
+
     start_time = time.time()
-    generate_comments(count)
+    comments = generate_comments(count, users, books, notes)
     print("--- %s seconds ---" % (time.time() - start_time))
+
     start_time = time.time()
-    generate_likes(count)
+    generate_likes(count, users, notes, comments)
     print("--- %s seconds ---" % (time.time() - start_time))
+
     start_time = time.time()
-    generate_bookRating(count)
+    generate_bookRating(count, users, books)
     print("--- %s seconds ---" % (time.time() - start_time))
+
     start_time = time.time()
-    generate_userToBook(count)
+    generate_userToBook(count, users, books)
     print("--- %s seconds ---" % (time.time() - start_time))
+
+    print("Data generating finished. Total time %s seconds" % (time.time() - start_all))
