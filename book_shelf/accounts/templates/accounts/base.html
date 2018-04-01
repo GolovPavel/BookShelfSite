@@ -1,0 +1,28 @@
+{% load static %}
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>
+      {% block title %}
+      {% endblock %}
+    </title>
+
+    <link href="{% static "main_app/css/bootstrap.css" %}" rel="stylesheet" type="text/css" >
+    <link href="{% static "accounts/css/style.css" %}" rel="stylesheet">
+
+    {% block extrahead %}
+    {% endblock %}
+  </head>
+  <body>
+    <body class="text-center">
+      {% block content %}
+      {% endblock %}
+    </body>
+  </body>
+  {% block afterscripts %}
+
+  {% endblock %}
+</html>

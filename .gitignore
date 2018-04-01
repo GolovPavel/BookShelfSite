@@ -7,9 +7,14 @@ book_shelf/book_shelf/db.cnf
 
 #service files
 .idea/
+
 book_shelf/book_shelf/__pycache__/
 book_shelf/main_app/__pycache__/
+book_shelf/accounts/__pycache__/
+
 book_shelf/main_app/migrations/__pycache__/
+book_shelf/accounts/migrations/__pycache__/
+
 book_shelf/__pycache__/
 
 #media files

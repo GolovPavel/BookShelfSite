@@ -1,0 +1,34 @@
+{% extends "accounts/base.html" %}
+{% load widget_tweaks %}
+
+{% block title %}
+  Register
+{% endblock %}
+
+{% block content %}
+  <form class="form-signin" action="/accounts/register/" method="post">
+    {% csrf_token %}
+    <h1 class="h3 mb-3 font-weight-normal">Please sign up</h1>
+    {% if messages %}
+      {% for message in messages %}
+        <p{% if message.tags %} class="{{ message.tags }}"{% endif %}>
+            {{ message }}
+        </p>
+      {% endfor %}
+    {% endif %}
+    <p>
+        {{ form.email|add_class:"form-control"|attr:"placeholder:Email" }}
+        {{ form.email.errors }}
+    </p>
+    <p>
+      {{ form.username|add_class:"form-control"|attr:"placeholder:Username" }}
+      {{ form.username.errors }}
+    </p>
+    <p>
+        {{ form.password|add_class:"form-control"|attr:"placeholder:Password" }}
+        {{ form.password.errors }}
+    </p>
+
+    <button class="btn btn-lg btn-primary btn-block" type="submit">Sign up</button>
+  </form>
+{% endblock %}

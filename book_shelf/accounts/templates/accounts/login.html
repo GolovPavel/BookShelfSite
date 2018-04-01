@@ -1,0 +1,29 @@
+{% extends "accounts/base.html" %}
+{% load widget_tweaks %}
+
+{% block title %}
+  Login page
+{% endblock %}
+
+{% block content %}
+  <form class="form-signin" action="/accounts/login/" method="post">
+    {% csrf_token %}
+    <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+    {% if messages %}
+      {% for message in messages %}
+        <p{% if message.tags %} class="{{ message.tags }}"{% endif %}>
+            {{ message }}
+        </p>
+      {% endfor %}
+    {% endif %}
+    <p>
+      {{ form.username|add_class:"form-control"|attr:"placeholder:Username" }}
+      {{ form.username.errors }}
+    </p>
+    <p>
+        {{ form.password|add_class:"form-control"|attr:"placeholder:Password" }}
+        {{ form.password.errors }}
+    </p>
+    <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+  </form>
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends "main_app/base.html" %}
+{% load static %}
+
+{% block title %}
+  Main page
+{% endblock %}
+
+{% block content %}
+  {% if request.user.is_authenticated %}
+    Hello, {{ request.user.username }}
+    <a href = "/accounts/logout">Logout</a>
+  {% endif %}
+{% endblock %}
