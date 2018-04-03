@@ -126,6 +126,7 @@ class Note(models.Model):
     )
     created_at = models.DateTimeField(auto_now_add = True)
     likes = GenericRelation(Like)
+    comments = GenericRelation(Comment)
 
     def __str__(self):
         return "{} for book {}".format(self.title, self.book)

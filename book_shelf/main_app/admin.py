@@ -13,7 +13,7 @@ class BookAdmin(admin.ModelAdmin):
     pass
 
 class NoteAdmin(admin.ModelAdmin):
-    pass
+    list_max_show_all = 10
 
 class LikeAdmin(admin.ModelAdmin):
     pass

@@ -28,6 +28,28 @@ def index(request):
     )
 
 
+
+@login_required
+def get_note_by_id(request, note_id):
+    note = Note.objects.get(id = note_id)
+    likes = note.likes.aggregate(Count('id'))
+    comments = note.comments.filter(
+        from_user_id = request.user.id
+    )
+
+    context = {
+        'note': note,
+        'likes': likes['id__count'],
+        'comments': comments,
+    }
+
+    return render(
+        request,
+        'main_app/notepage.html',
+        context
+    )
+
+
 @login_required
 def get_notes_by_user(request):
     notes = Note.objects.filter(user = request.user.id)
@@ -35,23 +57,6 @@ def get_notes_by_user(request):
         request,
         'main_app/notespage.html',
         {'notes': notes}
-    )
-
-
-@login_required
-def get_note_by_id(request, note_id):
-    note = Note.objects.get(id = note_id)
-    likes = note.likes.aggregate(Count('id'))
-
-    context = {
-        'note': note,
-        'likes': likes['id__count'],
-    }
-
-    return render(
-        request,
-        'main_app/notepage.html',
-        context
     )
 
 

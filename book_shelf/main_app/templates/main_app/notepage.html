@@ -26,4 +26,14 @@
     </ul>
     </br>
   </div>
+  <div class="comments">
+    <h2>Comments:</h2>
+    {% for comment in comments %}
+      <div class = "comment">
+        <p style="margin-bottom: 0"><b>From:</b> {{ comment.from_user }}</p>
+        <p><b>Comment:</b> {{ comment.comment_text }}</p>
+      </div>
+      <br/>
+    {% endfor %}
+  </div>
 {% endblock %}

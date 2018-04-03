@@ -11,7 +11,7 @@
         {% for book in books %}
           <li>
             <h3>
-              <a href="{{book.get_absolute_url}}">Title: {{book.title}}</a>
+              <a href="{{book.get_absolute_url}}">{{book.title}}</a>
             </h3>
           </li>
         {% endfor %}
