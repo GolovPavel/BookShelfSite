@@ -1,0 +1,22 @@
+{% extends "main_app/base.html" %}
+
+{% block title %}
+  Books
+{% endblock %}
+
+{% block content %}
+    <center><h1>Books of user {{request.user.username}}</h1></center>
+    {% if books %}
+      <ol>
+        {% for book in books %}
+          <li>
+            <h3>
+              <a href="{{book.get_absolute_url}}">Title: {{book.title}}</a>
+            </h3>
+          </li>
+        {% endfor %}
+      </ol>
+    {% else %}
+      <p> No books found </p>
+    {% endif %}
+{% endblock %}

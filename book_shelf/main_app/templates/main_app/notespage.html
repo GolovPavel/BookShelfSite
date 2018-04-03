@@ -1,0 +1,22 @@
+{% extends "main_app/base.html" %}
+
+{% block title %}
+  Notes
+{% endblock %}
+
+{% block content %}
+  <center><h1>Notes of user {{request.user.username}}</h1></center>
+  {% if notes %}
+    <ol>
+      {% for note in notes %}
+        <li>
+          <h3>
+            <a href="{{ note.get_absolute_url }}">Title: {{note.title}}</a>
+          </h3>
+        </li>
+      {% endfor %}
+    </ol>
+  {% else %}
+    <p> No notes found </p>
+  {% endif %}
+{% endblock %}

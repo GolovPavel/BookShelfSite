@@ -1,0 +1,29 @@
+{% extends "main_app/base.html" %}
+
+{% block title %}
+  Note {{note.id}} page
+{% endblock %}
+
+{% block content %}
+  <center><h1>Note {{note.id}} page</h1></center>
+  <div class = "note">
+    <ul>
+      <li>
+        <b>Title:</b> {{note.title}}
+      </li>
+      <li>
+        <b>Text:</b> {{note.note_text}}
+      </li>
+      <li>
+        <b>For book:</b> {{note.book.id}}
+      </li>
+      <li>
+        <b>Created at:</b> {{note.created_at}}
+      </li>
+      <li>
+        <b>Likes:</b> {{likes}}
+      </li>
+    </ul>
+    </br>
+  </div>
+{% endblock %}
