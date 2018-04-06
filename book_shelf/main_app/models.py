@@ -36,9 +36,6 @@ class Like(models.Model):
         verbose_name = "Like"
         verbose_name_plural = "Likes"
 
-    def __str__(self):
-        return "from user {} for object {}".format(self.from_user, self.object_id)
-
 
 class Comment(models.Model):
     from_user = models.ForeignKey(
@@ -57,9 +54,6 @@ class Comment(models.Model):
     )
     object_id = models.PositiveIntegerField()
     content_object = GenericForeignKey('content_type', 'object_id')
-
-    def __str__(self):
-        return "from user {} for object {}".format(self.from_user, self.object_id)
 
     class Meta:
         indexes = [
@@ -92,9 +86,6 @@ class Book(models.Model):
         through='UserToBook'
     )
 
-    def __str__(self):
-        return self.title
-
     def get_absolute_url(self):
         return "/books/{}/".format(self.id)
 
@@ -125,11 +116,8 @@ class Note(models.Model):
         on_delete = models.CASCADE
     )
     created_at = models.DateTimeField(auto_now_add = True)
-    likes = GenericRelation(Like)
+    likes = GenericRelation(Like, related_query_name='notes')
     comments = GenericRelation(Comment)
-
-    def __str__(self):
-        return "{} for book {}".format(self.title, self.book)
 
     def get_absolute_url(self):
         return "/notes/{}/".format(self.id)
@@ -166,9 +154,6 @@ class BookRating(models.Model):
         verbose_name = "Book rating"
         verbose_name_plural = "Books rating"
 
-    def __str__(self):
-        return "from user {} for book {}".format(self.from_user, self.book)
-
 
 class UserToBook(models.Model):
     book = models.ForeignKey(
@@ -186,6 +171,3 @@ class UserToBook(models.Model):
 
         verbose_name = "Book of user"
         verbose_name_plural = "Books of users"
-
-    def __str__(self):
-        return "user: {}, book: {}".format(self.user, self.book)

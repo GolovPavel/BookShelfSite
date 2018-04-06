@@ -5,13 +5,14 @@
 {% endblock %}
 
 {% block content %}
-    <center><h1>Books of user {{request.user.username}}</h1></center>
-    {% if books %}
+    <center><h1>Books of user {{ request.user.username }}</h1></center>
+    {% if books_and_rating %}
       <ol>
-        {% for book in books %}
+        {% for book, rating in books_and_rating.items %}
           <li>
             <h3>
-              <a href="{{book.get_absolute_url}}">{{book.title}}</a>
+              <a href="{{book.get_absolute_url}}">{{ book.title }}</a>
+              <p>Rating: {{ rating|floatformat:1 }}
             </h3>
           </li>
         {% endfor %}
