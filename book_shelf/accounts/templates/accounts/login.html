@@ -1,5 +1,6 @@
 {% extends "accounts/base.html" %}
 {% load widget_tweaks %}
+{% load static %}
 
 {% block title %}
   Login page
@@ -8,6 +9,7 @@
 {% block content %}
   <form class="form-signin" action="{% url 'login' %}" method="post">
     {% csrf_token %}
+    <img class = "mb-4 logo" src="{% static 'main_app/img/logo.png' %}"/>
     <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
     {% if messages %}
       {% for message in messages %}
