@@ -22,14 +22,20 @@
         {{ form.email.errors }}
     </p>
     <p>
-      {{ form.username|add_class:"form-control"|attr:"placeholder:Username" }}
-      {{ form.username.errors }}
+        {{ form.username|add_class:"form-control"|attr:"placeholder:Username" }}
+        {{ form.username.errors }}
     </p>
     <p>
         {{ form.password|add_class:"form-control"|attr:"placeholder:Password" }}
         {{ form.password.errors }}
     </p>
-
     <button class="btn btn-lg btn-primary btn-block" type="submit">Sign up</button>
+    <a href="{% url 'index' %}">
+      <button type="button" class="btn btn-primary mt-2 btn-lg">Home</button>
+    </a>
+    <a href="{% url 'login' %}">
+      <button type="button" class="btn btn-primary mt-2 btn-lg">Sign in</button>
+    </a>
+    <p class="mt-3 mb-3 text-muted">&copy; 2018</p>
   </form>
 {% endblock %}
