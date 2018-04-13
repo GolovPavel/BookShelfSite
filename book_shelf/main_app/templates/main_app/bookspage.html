@@ -6,13 +6,13 @@
 
 {% block content %}
     <center><h1>Books of user {{ request.user.username }}</h1></center>
-    {% if books_and_rating %}
+    {% if books %}
       <ol>
-        {% for book, rating in books_and_rating.items %}
+        {% for book in books %}
           <li>
             <h3>
               <a href="{{book.get_absolute_url}}">{{ book.title }}</a>
-              <p>Rating: {{ rating|floatformat:1 }}
+              <p>Rating: {{ book.rating|floatformat:1 }}
             </h3>
           </li>
         {% endfor %}

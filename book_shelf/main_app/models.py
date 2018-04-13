@@ -61,6 +61,8 @@ class Comment(models.Model):
             models.Index(fields=['content_type', 'object_id', 'created_at'])
         ]
 
+        ordering = ["created_at"]
+
         verbose_name = "Comment"
         verbose_name_plural = "Comments"
 
@@ -116,7 +118,7 @@ class Note(models.Model):
         on_delete = models.CASCADE
     )
     created_at = models.DateTimeField(auto_now_add = True)
-    likes = GenericRelation(Like, related_query_name='notes')
+    likes = GenericRelation(Like)
     comments = GenericRelation(Comment)
 
     def get_absolute_url(self):

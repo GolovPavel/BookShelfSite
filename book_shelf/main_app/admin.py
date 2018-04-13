@@ -13,19 +13,19 @@ class BookAdmin(admin.ModelAdmin):
     pass
 
 class NoteAdmin(admin.ModelAdmin):
-    list_max_show_all = 10
+    raw_id_fields = ('book', 'user',)
 
 class LikeAdmin(admin.ModelAdmin):
-    pass
+    raw_id_fields = ('from_user', 'content_type',)
 
 class CommentAdmin(admin.ModelAdmin):
-    pass
+    raw_id_fields = ('from_user', 'content_type',)
 
 class BookRatingAdmin(admin.ModelAdmin):
-    pass
+    raw_id_fields = ('book', 'from_user',)
 
 class UserToBookAdmin(admin.ModelAdmin):
-    pass
+    raw_id_fields = ('book', 'user',)
 
 admin.site.register(Book, BookAdmin)
 admin.site.register(Note, NoteAdmin)
