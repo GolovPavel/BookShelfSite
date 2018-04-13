@@ -6,13 +6,13 @@
 
 {% block content %}
   <center><h1>Notes of user {{ request.user.username }}</h1></center>
-  {% if notes_and_likes %}
+  {% if notes %}
     <ol>
-      {% for note, likes in notes_and_likes.items %}
+      {% for note in notes %}
         <li>
           <h3>
             <a href="{{ note.get_absolute_url }}">Title: {{ note.title }}</a>
-            <p>Likes: {{ likes }}</p>
+            <p>Likes: {{ note.likes_count }}</p>
           </h3>
         </li>
       {% endfor %}

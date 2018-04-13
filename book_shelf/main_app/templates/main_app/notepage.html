@@ -21,7 +21,7 @@
         <b>Created at:</b> {{note.created_at}}
       </li>
       <li>
-        <b>Likes:</b> {{likes}}
+        <b>Likes:</b> {{note.likes_count}}
       </li>
     </ul>
     </br>
@@ -30,8 +30,9 @@
     <h2>Comments:</h2>
     {% for comment in comments %}
       <div class = "comment">
-        <p style="margin-bottom: 0"><b>From:</b> {{ user_username }}</p>
-        <p><b>Comment:</b> {{ comment.comment_text }}</p>
+        <p style="margin-bottom: 0"><b>From:</b> {{ comment.from_user.username }}</p>
+        <p style="margin-bottom: 0"><b>Comment:</b> {{ comment.comment_text }}</p>
+        <p><b>Created at:</b> {{ comment.created_at }}</p>
       </div>
       <br/>
     {% endfor %}
