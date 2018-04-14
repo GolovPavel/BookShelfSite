@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'debug_toolbar',
+    'webpack_loader',
 ]
 
 MIDDLEWARE = [
@@ -88,6 +89,14 @@ DATABASES = {
             'read_default_file': 'book_shelf/db.cnf',
         },
     }
+}
+
+
+WEBPACK_LOADER = {
+    'DEFAULT': {
+            'BUNDLE_DIR_NAME': 'bundles/',
+            'STATS_FILE': os.path.join(BASE_DIR, 'webpack-stats.dev.json'),
+        }
 }
 
 

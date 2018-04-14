@@ -24,7 +24,7 @@ def index(request):
     if request.user.is_authenticated:
         return render(
             request,
-            'main_app/mainpage.html',
+            'main_app/mainpage1.html',
         )
 
     return render(
