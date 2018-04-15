@@ -1,26 +1,54 @@
-{% extends "main_app/base.html" %}
+{% extends "main_app/loginedpage.html" %}
+{% load static %}
 
 {% block title %}
   Book {{book.id}} page
 {% endblock %}
 
+{% block extrahead %}
+  <link href="{% static "main_app/css/bookpage.css" %}" rel="stylesheet" type="text/css" >
+{% endblock %}
+
 {% block content %}
-  <center><h1>Book {{book.id}} page</h1></center>
-  <div class = "book">
-    <ul>
-      <li>
-        <b>Title:</b> {{book.title}}
-      </li>
-      <li>
-        <b>Description:</b> {{book.description}}
-      </li>
-      <li>
-        <b>Created at:</b> {{book.created_at}}
-      </li>
-      <li>
-        <b>Rating:</b> {{ book.rating|floatformat:1 }}
-      </li>
-    </ul>
-    </br>
+  {{ block.super }}
+  <div class="container book_container rounded p-2">
+    <div class="container">
+      <div class="row">
+        <div class="col-xs-12 col-md-6 col-lg-6 col-xl-6 d-flex justify-content-center">
+          <img class="bookImg" src='/{{ book.picture }}' />
+        </div>
+        <div class="border rounded border-light col-xs-12 col-md-6 col-lg-6 col-xl-6 mt-2">
+          <h2 class="font-weight-bold"><b><u>Book desctiption</u></b></h2>
+          <h3><b>Title:</b> {{book.title}}</h3>
+          <h3><b>Rating:</b> {{book.rating|floatformat}}</h3>
+          <h3><b>Created at:</b> {{book.created_at|date:"d M Y"}}</h3>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12 mt-3">
+          <h5><b>Description:</b>{{book.description}}</h5>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12 mt-3">
+          <h2 class="font-weight-bold"><u>Notes</u></h2>
+          {% if not notes %}
+            <h5>No notes found</h5>
+          {% else %}
+            {% for note in notes %}
+              <div class="card bg-light mt-2">
+                <div class="card-header">
+                  <b>{{note.title}}</b>
+                </div>
+                <div class="card-body">
+                  <p class="card-text">{{note.note_text}}</p>
+                </div>
+              </div>
+            {% endfor %}
+          {% endif %}
+        </div>
+      </div>
+    </div>
   </div>
+
 {% endblock %}

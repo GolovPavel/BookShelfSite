@@ -26,7 +26,7 @@ def index(request):
     if request.user.is_authenticated:
         return render(
             request,
-            'main_app/mainpage1.html',
+            'main_app/mainpage.html',
         )
 
     return render(
@@ -62,15 +62,17 @@ def get_books_by_user(request):
 @login_required
 def get_book_by_id(request, book_id):
     book = Book.objects.annotate(rating = Coalesce(Avg('bookrating__rating'), 0.0)).get(id = book_id)
+    notes = book.note_set.filter(user_id=request.user.id)
 
     context = {
         'book': book,
+        'notes': notes,
     }
 
     return render(
         request,
         'main_app/bookpage.html',
-        {'book': book,},
+        context
     )
 
 #Deprecated methods
