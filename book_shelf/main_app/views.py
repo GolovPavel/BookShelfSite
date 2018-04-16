@@ -1,14 +1,14 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.http import JsonResponse
-from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.db.models.functions import Coalesce
-from django.core.paginator import Paginator, EmptyPage
+from django.core.paginator import Paginator
 
 from django.db.models import Avg
 from django.db.models import Count
 
+from django.contrib.auth.models import User
 from main_app.models import Book
 from main_app.models import Note
 from main_app.models import Like
@@ -20,7 +20,6 @@ from django.contrib.contenttypes.models import ContentType
 
 #Caching models content types
 notes_content_id = ContentType.objects.get_for_model(Note).id
-
 
 def index(request):
     if request.user.is_authenticated:
@@ -37,7 +36,6 @@ def index(request):
 @login_required
 def get_books_by_user(request):
     books = Book.objects \
-        .annotate(rating = Coalesce(Avg('bookrating__rating'), 0.0)) \
         .filter(users = request.user.id) \
         .values('id', 'title', 'picture')
 
@@ -61,8 +59,13 @@ def get_books_by_user(request):
 
 @login_required
 def get_book_by_id(request, book_id):
-    book = Book.objects.annotate(rating = Coalesce(Avg('bookrating__rating'), 0.0)).get(id = book_id)
-    notes = book.note_set.filter(user_id=request.user.id)
+    book = Book.objects \
+        .annotate(rating = Coalesce(Avg('bookrating__rating'), 0)) \
+        .get(id = book_id)
+
+    notes = book.note_set \
+        .filter(user_id=request.user.id) \
+        .annotate(likes_count = Count('likes'))
 
     context = {
         'book': book,

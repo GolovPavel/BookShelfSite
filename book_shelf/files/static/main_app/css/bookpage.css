@@ -8,6 +8,10 @@ body {
   background-color: rgb(177, 177, 177);
 }
 
+.bookInf {
+  background-color: rgb(144, 210, 227);
+}
+
 .bookImg {
   width: 20em;
   height: 28em;

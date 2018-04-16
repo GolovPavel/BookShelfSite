@@ -13,35 +13,46 @@
   {{ block.super }}
   <div class="container book_container rounded p-2">
     <div class="container">
-      <div class="row">
-        <div class="col-xs-12 col-md-6 col-lg-6 col-xl-6 d-flex justify-content-center">
-          <img class="bookImg" src='/{{ book.picture }}' />
+      <div class="row mr-1">
+        <div class="col-xs-12 col-md-12 col-lg-5 col-xl-5 d-flex justify-content-center">
+          <img class="bookImg rounded" src='/{{ book.picture }}' />
         </div>
-        <div class="border rounded border-light col-xs-12 col-md-6 col-lg-6 col-xl-6 mt-2">
-          <h2 class="font-weight-bold"><b><u>Book desctiption</u></b></h2>
-          <h3><b>Title:</b> {{book.title}}</h3>
-          <h3><b>Rating:</b> {{book.rating|floatformat}}</h3>
-          <h3><b>Created at:</b> {{book.created_at|date:"d M Y"}}</h3>
+        <div class=" bookInf rounded col-xs-12 col-md-12 col-lg-7 col-xl-7 mt-2">
+          <h3 class="font-weight-bold mt-2 mb-4"><i class="fas fa-book mr-2"></i><b>Book desctiption</b></h3>
+          <h5><b>Title:</b> {{book.title}}</h5>
+          <h5><b>Rating:</b>
+            {% for i in "12345" %}
+              {% if i <= book.rating|floatformat:"0" %}
+                <i class="fas fa-star"></i>
+              {% else %}
+                <i class="far fa-star"></i>
+              {% endif %}
+            {% endfor %}
+          </h5>
+          <h5><b>Created at:</b> {{book.created_at|date:"d M Y"}}</h5>
+        </div>
+      </div>
+      <div class="row mt-3">
+        <div class="col-12 mt-3">
+          <h5 class="text-justify">{{book.description}}</h5>
         </div>
       </div>
       <div class="row">
-        <div class="col-12 mt-3">
-          <h5><b>Description:</b>{{book.description}}</h5>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-12 mt-3">
-          <h2 class="font-weight-bold"><u>Notes</u></h2>
+        <div class="col-12 mt-3 mb-2">
+          <h2 class="font-weight-bold text-center"><i class="far fa-sticky-note mr-1"></i>Notes</h2>
           {% if not notes %}
-            <h5>No notes found</h5>
+            <div class="alert alert-success mr-1 ml-1 mt-4" role="alert">
+              <h5 class="text-center">No notes found <i class="far fa-frown"></i></h5>
+            </div>
           {% else %}
             {% for note in notes %}
-              <div class="card bg-light mt-2">
+              <div class="card bg-light mt-4">
                 <div class="card-header">
-                  <b>{{note.title}}</b>
+                  <b><i class="fas fa-circle-notch mr-1"></i>{{note.title}}</b>
                 </div>
                 <div class="card-body">
                   <p class="card-text">{{note.note_text}}</p>
+                  <p class="card-text text-right"><i class="fas fa-heart mr-1"></i>{{note.likes_count}}</p>
                 </div>
               </div>
             {% endfor %}

@@ -11,7 +11,7 @@ const BooksContainer = ({books, num_pages, current_page, is_loading, onChangePag
         (is_loading) ?
           <div className="row">
             <div className="loading col-12 d-flex justify-content-center">
-              <img className="loadingGif" src="/static/main_app/gif/Loading_icon.gif" alt="Loading" />
+              <i className="loadingGif fas fa-spinner fa-pulse fa-7x"></i>
             </div>
           </div>
           :
