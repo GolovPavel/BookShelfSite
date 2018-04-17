@@ -48,24 +48,36 @@
           <img class = "logo" src="{% static 'main_app/img/logo.png' %}" />
           <h1 class="display-3">Book shelf</h1>
         </div>
-        <p>New approach to reading books. </p>
-        <p><a class="btn btn-primary btn-lg" href="{% url 'register' %}" role="button">Try it &raquo;</a></p>
+        <h4>A New approach to reading books.</h4>
+        <p><a class="btn btn-primary btn-lg mt-3" href="{% url 'register' %}" role="button">Try it &raquo;</a></p>
       </div>
     </div>
 
     <div class="container">
       <div class="row">
-        <div class="col-md-4">
-          <h2>Add your books</h2>
-          <p>Add books to your library, monitor progress of reading and do not forget about the books that you wanted to read.</p>
+        <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4 mt-2 d-flex justify-content-center">
+          <div class="card">
+            <img class="card-img-top" src="{% static 'main_app/img/welcome_card1.jpeg' %}" alt="Card 1">
+            <div class="card-body">
+              <p class="card-text">Add books to your library, monitor progress of reading and do not forget about the books that you wanted to read.</p>
+            </div>
+          </div>
         </div>
-        <div class="col-md-4">
-          <h2>Leave notes</h2>
-          <p>During the reading of the book, leave notes to remember the key points of the book</p>
+        <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4 mt-2 d-flex justify-content-center">
+          <div class="card">
+            <img class="card-img-top" src="{% static 'main_app/img/welcome_card2.jpeg' %}" alt="Card 1">
+            <div class="card-body">
+              <p class="card-text">During the reading of the book, leave notes to remember the key points of the book</p>
+            </div>
+          </div>
         </div>
-        <div class="col-md-4">
-          <h2>Communicate</h2>
-          <p>Share your books to your friends, comment books, rate books and keep track of your friend's progress! </p>
+        <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4 mt-2 d-flex justify-content-center">
+          <div class="card myCard">
+            <img class="card-img-top" src="{% static 'main_app/img/welcome_card3.jpeg' %}" alt="Card 1">
+            <div class="card-body">
+              <p class="card-text">Share your books to your friends, comment books, rate books and keep track of your friend's progress!</p>
+            </div>
+          </div>
         </div>
       </div>
       <hr>

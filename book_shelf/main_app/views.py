@@ -33,6 +33,8 @@ def index(request):
         'main_app/welcomepage.html',
     )
 
+
+#Api for react app
 @login_required
 def get_books_by_user(request):
     books = Book.objects \
@@ -57,6 +59,18 @@ def get_books_by_user(request):
 
     return JsonResponse(response)
 
+
+@login_required
+def get_user_information(request):
+    user_inf = User.objects \
+        .filter(id = request.user.id) \
+        .annotate(books_count = Count('book__id')) \
+        .values('username', 'email', 'books_count')
+
+    return JsonResponse(list(user_inf), safe=False)
+
+
+#View for django template
 @login_required
 def get_book_by_id(request, book_id):
     book = Book.objects \
@@ -77,6 +91,21 @@ def get_book_by_id(request, book_id):
         'main_app/bookpage.html',
         context
     )
+
+
+@login_required
+def get_profile_page(request):
+    user_info = User.objects \
+        .annotate(books_count = Count('book__id', distinct=True)) \
+        .annotate(notes_count = Count('note__id', distinct=True)) \
+        .get(id = request.user.id)
+
+    return render(
+        request,
+        'main_app/profilepage.html',
+        {'user_info': user_info}
+    )
+
 
 #Deprecated methods
 @login_required

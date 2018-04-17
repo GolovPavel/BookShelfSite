@@ -10,3 +10,8 @@ body {
 .logo {
   height: 60px;
 }
+
+.card {
+  min-height: 20em;
+  width: 18rem;
+}
