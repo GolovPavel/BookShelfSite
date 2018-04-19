@@ -13,8 +13,7 @@ const BooksContainer = ({books, num_pages, current_page, is_loading, onChangePag
             <div className="loading col-12 d-flex justify-content-center">
               <i className="loadingGif fas fa-spinner fa-pulse fa-7x"></i>
             </div>
-          </div>
-          :
+          </div> :
           <div className="loadedBooks">
             <BooksList books={books} />
             <Pagination
