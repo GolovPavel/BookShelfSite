@@ -1,8 +1,12 @@
 import React from 'react'
 
+import { Link } from 'react-router-dom'
+
 const Navbar = () =>
   <nav className="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-    <a className="navbar-brand" href="/">Book shelf</a>
+    <Link to="/">
+      <div className="navbar-brand">Book shelf</div>
+    </Link>
     <button className="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
       <span className="navbar-toggler-icon"></span>
     </button>
@@ -10,10 +14,14 @@ const Navbar = () =>
     <div className="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
       <ul className="navbar-nav mr-auto">
         <li className="nav-item active">
-          <a className="nav-link" href="/">Home<span className="sr-only">(current)</span></a>
+          <Link to="/">
+            <div className="nav-link">Home</div>
+          </Link>
         </li>
         <li className="nav-item">
-          <a className="nav-link" href="/profile">Profile<span className="sr-only">(current)</span></a>
+          <Link to="/profile">
+            <div className="nav-link">Profile</div>
+          </Link>
         </li>
       </ul>
     </div>

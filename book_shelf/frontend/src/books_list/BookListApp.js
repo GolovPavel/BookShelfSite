@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 
-import Navbar from './Navbar';
+import PageTemplate from '../PageTemplate';
 import BooksContainer from './BooksContainer';
 
 import fetch from 'isomorphic-fetch';
 
-import './css/App.css';
 
-class App extends Component {
+class BookListApp extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -58,17 +57,17 @@ class App extends Component {
 
   render() {
     return (
-      <div className="App">
-        <Navbar />
+      <PageTemplate>
         <BooksContainer
           books={this.state.books}
           num_pages={this.state.num_pages}
           current_page={this.state.current_page}
           is_loading={this.state.is_loading}
           onChangePage={this.changePage} />
-      </div>
+      </PageTemplate>
     );
   }
 }
 
-export default App;
+
+export default BookListApp;

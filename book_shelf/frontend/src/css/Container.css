@@ -1,9 +1,10 @@
-body {
-  background-color: rgba(144, 147, 147, 0.2);
-}
-
-.book_container {
+.contentContainer {
   margin-top: 5em;
   min-height: 50em;
   background-color: rgb(177, 177, 177);
+}
+
+
+.loading {
+  margin-top: 20em;
 }

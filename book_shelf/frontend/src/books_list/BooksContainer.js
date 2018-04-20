@@ -2,10 +2,10 @@ import React from 'react';
 
 import BooksList from './BooksList';
 import Pagination from './Pagination';
-import './css/BooksContainer.css';
+import '../css/Container.css';
 
 const BooksContainer = ({books, num_pages, current_page, is_loading, onChangePage}) =>
-  <div className="container books_container rounded p-2">
+  <div className="container contentContainer rounded p-2">
     <div className="container">
       {
         (is_loading) ?

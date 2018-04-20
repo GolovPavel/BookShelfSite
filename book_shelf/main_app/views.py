@@ -4,9 +4,11 @@ from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.db.models.functions import Coalesce
 from django.core.paginator import Paginator
+from django.core import serializers
 
 from django.db.models import Avg
 from django.db.models import Count
+
 
 from django.contrib.auth.models import User
 from main_app.models import Book
@@ -62,75 +64,57 @@ def get_books_by_user(request):
 
 @login_required
 def get_user_information(request):
-    user_inf = User.objects \
+    user_info = User.objects \
         .filter(id = request.user.id) \
-        .annotate(books_count = Count('book__id')) \
-        .values('username', 'email', 'books_count')
+        .annotate(books_count = Count('book__id', distinct=True)) \
+        .annotate(notes_count = Count('note__id', distinct=True)) \
+        .values('username', 'email', 'books_count', 'notes_count')
 
-    return JsonResponse(list(user_inf), safe=False)
+    response = {
+        'user': list(user_info),
+    }
 
+    return JsonResponse(response)
 
-#View for django template
 @login_required
 def get_book_by_id(request, book_id):
     book = Book.objects \
-        .annotate(rating = Coalesce(Avg('bookrating__rating'), 0)) \
-        .get(id = book_id)
+            .annotate(rating = Coalesce(Avg('bookrating__rating'), 0))
 
-    notes = book.note_set \
+    notes = book.get(id=book_id) \
+        .note_set \
         .filter(user_id=request.user.id) \
-        .annotate(likes_count = Count('likes'))
+        .annotate(likes_count = Count('likes')) \
+        .values('title', 'note_text', 'likes_count')
 
-    context = {
-        'book': book,
-        'notes': notes,
+    response = {
+        'book': list(
+            book.filter(id=book_id) \
+                .values('title', 'description', 'picture', 'rating')
+        ),
+        'notes': list(notes),
     }
 
-    return render(
-        request,
-        'main_app/bookpage.html',
-        context
-    )
+    return JsonResponse(response)
 
-
-@login_required
-def get_profile_page(request):
-    user_info = User.objects \
-        .annotate(books_count = Count('book__id', distinct=True)) \
-        .annotate(notes_count = Count('note__id', distinct=True)) \
-        .get(id = request.user.id)
-
-    return render(
-        request,
-        'main_app/profilepage.html',
-        {'user_info': user_info}
-    )
-
-
-#Deprecated methods
-@login_required
-def get_note_by_id(request, note_id):
-    note = Note.objects.annotate(likes_count = Count('likes')).get(id = note_id)
-    comments = note.comments.select_related('from_user')
-
-    context = {
-        'note': note,
-        'comments': comments,
-    }
-
-    return render(
-        request,
-        'main_app/notepage.html',
-        context,
-    )
-
-
-@login_required
-def get_notes_by_user(request):
-    notes = Note.objects.filter(user = request.user.id).annotate(likes_count = Count('likes'))
-
-    return render(
-        request,
-        'main_app/notespage.html',
-        {'notes': notes,},
-    )
+#View for django template
+# @login_required
+# def get_book_by_id(request, book_id):
+#     book = Book.objects \
+#         .annotate(rating = Coalesce(Avg('bookrating__rating'), 0)) \
+#         .get(id = book_id)
+#
+#     notes = book.note_set \
+#         .filter(user_id=request.user.id) \
+#         .annotate(likes_count = Count('likes'))
+#
+#     context = {
+#         'book': book,
+#         'notes': notes,
+#     }
+#
+#     return render(
+#         request,
+#         'main_app/bookpage.html',
+#         context
+#     )

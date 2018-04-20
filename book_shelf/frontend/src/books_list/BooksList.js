@@ -5,7 +5,7 @@ import _ from 'lodash';
 import Book from './Book';
 import BooksRow from './BooksRow';
 
-import './css/BooksList.css';
+import '../css/book_list/BooksList.css';
 
 const BooksList = ({ books }) => {
     if (books.length === 0) {
