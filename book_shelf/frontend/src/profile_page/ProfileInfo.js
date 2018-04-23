@@ -17,11 +17,11 @@ const ProfileInfo = ({user_info}) =>
     </div>
   </div>
 
-ProfileContainer.propTypes = {
+ProfileInfo.propTypes = {
   user_info: PropTypes.object.isRequired,
 }
 
-ProfileContainer.defaultProps = {
+ProfileInfo.defaultProps = {
   user_info: {},
 }
 
