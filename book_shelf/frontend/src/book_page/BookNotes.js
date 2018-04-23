@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import BookNote from './BookNote';
 
@@ -17,5 +18,14 @@ const BookNotes = ({notes}) =>
       }
     </div>
   </div>
+
+BookNotes.propTypes = {
+  notes: PropTypes.array.isRequired,
+}
+
+BookNotes.defaultProps = {
+  notes: [],
+}
+
 
 export default BookNotes;

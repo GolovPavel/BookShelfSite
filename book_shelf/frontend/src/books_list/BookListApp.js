@@ -9,6 +9,7 @@ import fetch from 'isomorphic-fetch';
 class BookListApp extends Component {
   constructor(props) {
     super(props);
+
     this.state = {
       is_loading: false,
       books: [],
@@ -31,8 +32,8 @@ class BookListApp extends Component {
           ...json.books,
         ],
         is_loading: false,
-        current_page: json.current_page,
-        num_pages: json.num_pages,
+        current_page: parseInt(json.current_page),
+        num_pages: parseInt(json.num_pages),
       }));
   }
 
@@ -50,8 +51,8 @@ class BookListApp extends Component {
           ...json.books,
         ],
         is_loading: false,
-        current_page: json.current_page,
-        num_pages: json.num_pages,
+        current_page: parseInt(json.current_page),
+        num_pages: parseInt(json.num_pages),
       }));
   }
 

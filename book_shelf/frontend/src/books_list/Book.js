@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import {Link} from 'react-router-dom';
 
@@ -11,5 +12,19 @@ const Book = ({ title, rating, id , picture}) =>
         <img className="bookImg rounded" src={picture} title={title} alt={title} />
       </Link>
   </div>
+
+Book.propTypes = {
+  title: PropTypes.string.isRequired,
+  rating: PropTypes.number.isRequired,
+  id: PropTypes.number.isRequired,
+  picture: PropTypes.string.isRequired,
+}
+
+Book.defaultProps = {
+  title: "",
+  rating: 0,
+  id: 0,
+  picture: "",
+}
 
 export default Book;

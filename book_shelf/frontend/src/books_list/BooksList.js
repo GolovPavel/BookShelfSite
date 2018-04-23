@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import _ from 'lodash';
 
@@ -23,6 +24,14 @@ const BooksList = ({ books }) => {
         <BooksRow key={idx} chunk={chunk} />
       );
     }
+}
+
+BooksList.propTypes = {
+  book: PropTypes.array.isRequired,
+}
+
+BooksList.defaultProps = {
+  book: [],
 }
 
 export default BooksList;

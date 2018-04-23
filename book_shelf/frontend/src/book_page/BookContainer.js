@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import BookInfo from './BookInfo';
 import BookNotes from './BookNotes';
@@ -22,5 +23,17 @@ const BookContainer = ({book, notes, is_loading}) =>
       }
     </div>
   </div>
+
+BookContainer.propTypes = {
+  book: PropTypes.object.isRequired,
+  notes: PropTypes.array.isRequired,
+  is_loading: PropTypes.bool.isRequired,
+}
+
+BookContainer.defaultProps = {
+  book: {},
+  notes: [],
+  is_loading: false,
+}
 
 export default BookContainer;

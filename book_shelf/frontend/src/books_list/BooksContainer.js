@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import BooksList from './BooksList';
 import Pagination from './Pagination';
@@ -24,5 +25,22 @@ const BooksContainer = ({books, num_pages, current_page, is_loading, onChangePag
       }
     </div>
   </div>
+
+
+BooksContainer.propTypes = {
+  books: PropTypes.array.isRequired,
+  num_pages: PropTypes.number.isRequired,
+  current_page: PropTypes.number.isRequired,
+  is_loading: PropTypes.bool.isRequired,
+  onChangePage: PropTypes.func.isRequired,
+}
+
+BooksContainer.defaultProps = {
+  books: [],
+  num_pages: 0,
+  current_page: 0,
+  is_loading: true,
+  onChangePage: f=>f,
+}
 
 export default BooksContainer;

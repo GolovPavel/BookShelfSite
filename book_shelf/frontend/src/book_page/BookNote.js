@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 
 const BookNote = ({note}) =>
@@ -11,5 +12,13 @@ const BookNote = ({note}) =>
       <p className="card-text text-right"><i className="fas fa-heart mr-1"></i>{note.likes_count}</p>
     </div>
   </div>
+
+BookNote.propTypes = {
+  notes: PropTypes.object.isRequired,
+}
+
+BookNote.defaultProps = {
+  notes: {},
+}
 
 export default BookNote;

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import ProfileInfo from './ProfileInfo';
 
@@ -21,5 +22,14 @@ const ProfileContainer = ({user_info}) =>
       }
     </div>
   </div>
+
+
+ProfileContainer.propTypes = {
+  user_info: PropTypes.object.isRequired,
+}
+
+ProfileContainer.defaultProps = {
+  user_info: {},
+}
 
 export default ProfileContainer;

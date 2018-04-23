@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import BookRating from './BookRating';
 
@@ -23,5 +24,14 @@ const BookInfo = ({book}) =>
         </div>
       </div>
     </div>
+
+BookInfo.propTypes = {
+  book: PropTypes.object.isRequired,
+}
+
+BookInfo.defaultProps = {
+  book: {},
+}
+
 
 export default BookInfo;

@@ -1,8 +1,9 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import _ from 'lodash';
 
-const BookNotes = ({rating}) =>
+const BookRating = ({rating}) =>
   <h5>
     <b>Rating: </b>
     {
@@ -14,4 +15,12 @@ const BookNotes = ({rating}) =>
     }
   </h5>
 
-export default BookNotes;
+BookRating.propTypes = {
+  notes: PropTypes.number.isRequired,
+}
+
+BookRating.defaultProps = {
+  notes: 0,
+}
+
+export default BookRating;

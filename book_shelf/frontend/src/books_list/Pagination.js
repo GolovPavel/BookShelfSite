@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 
 import PaginationPage from './PaginationPage';
 
@@ -16,7 +17,7 @@ const Pagination = ({ num_pages, current_page, onChangePage }) =>
                     key={idx}
                     page_num={idx}
                     isActive={(idx == current_page) ? true : false}
-                    onChangePage={(idx == current_page) ? "" : onChangePage} />
+                    onChangePage={(idx == current_page) ? (f=>f) : onChangePage} />
                 ) :
               <p></p>
           }
@@ -24,6 +25,18 @@ const Pagination = ({ num_pages, current_page, onChangePage }) =>
       </nav>
     </div>
   </div>
+
+Pagination.propTypes = {
+  num_pages: PropTypes.number.isRequired,
+  current_page: PropTypes.number.isRequired,
+  onChangePage: PropTypes.func.isRequired,
+}
+
+Pagination.defaultProps = {
+  num_pages: 0,
+  current_page: 0,
+  onChangePage: f=>f,
+}
 
 
 export default Pagination;
