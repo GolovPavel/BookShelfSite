@@ -6,7 +6,7 @@ import BookNotes from './BookNotes';
 
 import '../css/Container.css';
 
-const BookContainer = ({book, notes, is_loading}) =>
+const BookContainer = ({book, notes, is_loading, onAddNote}) =>
   <div className="container contentContainer rounded p-2">
     <div className="container">
       {
@@ -18,7 +18,7 @@ const BookContainer = ({book, notes, is_loading}) =>
           </div> :
           <div className="container">
             <BookInfo book={book} />
-            <BookNotes notes={notes} />
+            <BookNotes notes={notes} onAddNote={onAddNote} />
           </div>
       }
     </div>

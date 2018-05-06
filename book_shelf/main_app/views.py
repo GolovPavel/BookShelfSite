@@ -18,10 +18,13 @@ from main_app.models import Comment
 from main_app.models import BookRating
 from main_app.models import UserToBook
 from django.contrib.contenttypes.models import ContentType
-
+import json
 
 #Caching models content types
 notes_content_id = ContentType.objects.get_for_model(Note).id
+
+#constants
+NOTE_EMPTY_TEXT = '<p></p>\n'
 
 def index(request):
     if request.user.is_authenticated:
@@ -97,24 +100,21 @@ def get_book_by_id(request, book_id):
 
     return JsonResponse(response)
 
-#View for django template
-# @login_required
-# def get_book_by_id(request, book_id):
-#     book = Book.objects \
-#         .annotate(rating = Coalesce(Avg('bookrating__rating'), 0)) \
-#         .get(id = book_id)
-#
-#     notes = book.note_set \
-#         .filter(user_id=request.user.id) \
-#         .annotate(likes_count = Count('likes'))
-#
-#     context = {
-#         'book': book,
-#         'notes': notes,
-#     }
-#
-#     return render(
-#         request,
-#         'main_app/bookpage.html',
-#         context
-#     )
+
+@login_required
+def add_note(request):
+    note_data = json.loads(request.body)
+
+    if note_data['title'] == '':
+        note_data['title'] = 'Not titled'
+    if note_data['note_text'] == NOTE_EMPTY_TEXT:
+        return HttpResponse('Note text should not be empty', status=400)
+
+    Note.objects.create(
+        title = note_data['title'],
+        note_text = note_data['note_text'],
+        book_id = note_data['book_id'],
+        user_id = request.user.id
+    )
+
+    return HttpResponse('')

@@ -32,8 +32,8 @@ class BookListApp extends Component {
           ...json.books,
         ],
         is_loading: false,
-        current_page: parseInt(json.current_page),
-        num_pages: parseInt(json.num_pages),
+        current_page: parseInt(json.current_page, 10),
+        num_pages: parseInt(json.num_pages, 10),
       }));
   }
 
@@ -51,8 +51,8 @@ class BookListApp extends Component {
           ...json.books,
         ],
         is_loading: false,
-        current_page: parseInt(json.current_page),
-        num_pages: parseInt(json.num_pages),
+        current_page: parseInt(json.current_page, 10),
+        num_pages: parseInt(json.num_pages, 10),
       }));
   }
 

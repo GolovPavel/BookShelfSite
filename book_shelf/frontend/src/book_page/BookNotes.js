@@ -2,11 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import BookNote from './BookNote';
+import AddNoteForm from './AddNoteForm';
 
-const BookNotes = ({notes}) =>
+const BookNotes = ({notes, onAddNote}) =>
   <div className="row">
     <div className="col-12 mt-3 mb-2">
       <h2 className="font-weight-bold text-center"><i className="far fa-sticky-note mr-1"></i>Notes</h2>
+      <AddNoteForm onAddNote={onAddNote} />
       {
         (notes.length) ?
           notes.map((elem, idx) =>

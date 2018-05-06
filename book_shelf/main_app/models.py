@@ -130,6 +130,8 @@ class Note(models.Model):
             models.Index(fields=['created_at'])
         ]
 
+        ordering = ["-created_at"]
+
         verbose_name = "Note"
         verbose_name_plural = "Notes"
 

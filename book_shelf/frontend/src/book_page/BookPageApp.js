@@ -4,7 +4,7 @@ import PageTemplate from '../PageTemplate';
 import BookContainer from './BookContainer';
 
 import fetch from 'isomorphic-fetch';
-
+import Cookie from 'js-cookie';
 
 class BookPageApp extends Component {
   constructor(props) {
@@ -15,6 +15,8 @@ class BookPageApp extends Component {
       book: {},
       notes: [],
     }
+
+    this.onAddNote = this.onAddNote.bind(this);
   }
 
   componentWillMount() {
@@ -33,6 +35,34 @@ class BookPageApp extends Component {
       }));
   }
 
+  updateNotes() {
+    fetch(`/api/book/${this.state.book_id}`, {
+      credentials: 'same-origin',
+    })
+      .then(response => response.json())
+      .then(json => this.setState({
+        notes: json.notes,
+      }));
+  }
+
+  onAddNote(title, note_text) {
+    const jsonData = {
+      title,
+      note_text,
+      book_id: this.state.book_id,
+    };
+
+    fetch("/api/note/add_note", {
+      credentials: 'same-origin',
+      method: 'POST',
+      headers: {
+        'X-CSRFToken': Cookie.get("csrftoken"),
+      },
+      body: JSON.stringify(jsonData),
+    })
+      .then(response => this.updateNotes());
+  }
+
 
   render() {
     return (
@@ -40,7 +70,8 @@ class BookPageApp extends Component {
         <BookContainer
           book={this.state.book}
           notes={this.state.notes}
-          is_loading={this.state.is_loading} />
+          is_loading={this.state.is_loading}
+          onAddNote={this.onAddNote}/>
       </PageTemplate>
     );
   }
