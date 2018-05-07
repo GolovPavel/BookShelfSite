@@ -9,7 +9,7 @@ const Book = ({ title, rating, id , picture}) =>
   <div className="col-sm-12 col-md-12 col-lg-4 col-xl-4 mt-3">
 
       <Link to={`/books/${id}/`}>
-        <img className="bookImg rounded" src={picture} title={title} alt={title} />
+        <img className="bookImg rounded" src={`/media/${picture}`} title={title} alt={title} />
       </Link>
   </div>
 

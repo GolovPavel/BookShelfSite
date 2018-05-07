@@ -60,7 +60,20 @@ class BookPageApp extends Component {
       },
       body: JSON.stringify(jsonData),
     })
-      .then(response => this.updateNotes());
+      .then(response => {
+        if (response.status == 200) {
+          this.setState({
+            notes: [
+              {
+                title,
+                note_text,
+                likes_count: 0,
+              },
+              ...this.state.notes,
+            ]
+          })
+        }
+      });
   }
 
 

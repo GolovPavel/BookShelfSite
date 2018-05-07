@@ -10,7 +10,7 @@ const BookInfo = ({book}) =>
     <div className = "bookInfo">
       <div className="row mr-1">
         <div className="col-xs-12 col-md-12 col-lg-5 col-xl-5 d-flex justify-content-center">
-          <img className="bookInfoImg rounded" alt="book_picture" src={book.picture} />
+          <img className="bookInfoImg rounded" alt="book_picture" src={`/media/${book.picture}`} />
         </div>
         <div className=" bookInf rounded col-xs-12 col-md-12 col-lg-7 col-xl-7 mt-2">
           <h3 className="font-weight-bold mt-2 mb-4"><i className="fas fa-book mr-2"></i><b>Book desctiption</b></h3>

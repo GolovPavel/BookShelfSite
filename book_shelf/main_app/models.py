@@ -74,7 +74,6 @@ class Book(models.Model):
     picture = models.ImageField(
         upload_to = "pictures/book_covers/",
         default = os.path.join(
-            MEDIA_ROOT,
             'pictures',
             'book_covers',
             'defaultCover.jpg'

@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models.functions import Coalesce
 from django.core.paginator import Paginator
 from django.core import serializers
+from django.core.files.storage import default_storage
 
 from django.db.models import Avg
 from django.db.models import Count
@@ -19,12 +20,12 @@ from main_app.models import BookRating
 from main_app.models import UserToBook
 from django.contrib.contenttypes.models import ContentType
 import json
+from . import constants
+from .forms import BookForm
 
 #Caching models content types
 notes_content_id = ContentType.objects.get_for_model(Note).id
 
-#constants
-NOTE_EMPTY_TEXT = '<p></p>\n'
 
 def index(request):
     if request.user.is_authenticated:
@@ -107,7 +108,7 @@ def add_note(request):
 
     if note_data['title'] == '':
         note_data['title'] = 'Not titled'
-    if note_data['note_text'] == NOTE_EMPTY_TEXT:
+    if note_data['note_text'] == constants.NOTE_EMPTY_TEXT:
         return HttpResponse('Note text should not be empty', status=400)
 
     Note.objects.create(
@@ -118,3 +119,16 @@ def add_note(request):
     )
 
     return HttpResponse('')
+
+@login_required
+def add_book(request):
+    if request.method == 'POST':
+        form = BookForm(request.POST, request.FILES)
+        if form.is_valid():
+            book = form.save()
+
+            UserToBook.objects.create(book_id = book.id, user_id = request.user.id)
+            return HttpResponse('')
+    else:
+        #TODO Error handling
+        return HttpResponse(status=400)

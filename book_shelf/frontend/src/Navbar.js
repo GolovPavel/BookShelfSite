@@ -23,6 +23,11 @@ const Navbar = () =>
             <div className="nav-link">Profile</div>
           </Link>
         </li>
+        <li className="nav-item">
+          <Link to="/add_book">
+            <div className="nav-link">Add book</div>
+          </Link>
+        </li>
       </ul>
     </div>
 

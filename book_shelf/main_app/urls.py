@@ -6,8 +6,10 @@ urlpatterns = [
     path('', views.index, name = 'index'),
 
     path('api/user_books/', views.get_books_by_user),
-    path('api/book/<int:book_id>/', views.get_book_by_id),
     path('api/user_info/', views.get_user_information),
+
+    path('api/book/<int:book_id>/', views.get_book_by_id),
+    path('api/book/add_book/', views.add_book),
 
     path('api/note/add_note', views.add_note),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) \
