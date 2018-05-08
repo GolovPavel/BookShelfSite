@@ -61,7 +61,7 @@ class BookPageApp extends Component {
       body: JSON.stringify(jsonData),
     })
       .then(response => {
-        if (response.status == 200) {
+        if (response.status === 200) {
           this.setState({
             notes: [
               {

@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_http_methods
 from django.db.models.functions import Coalesce
 from django.core.paginator import Paginator
 from django.core import serializers
@@ -103,6 +104,7 @@ def get_book_by_id(request, book_id):
 
 
 @login_required
+@require_http_methods(["POST"])
 def add_note(request):
     note_data = json.loads(request.body)
 
@@ -120,15 +122,19 @@ def add_note(request):
 
     return HttpResponse('')
 
-@login_required
-def add_book(request):
-    if request.method == 'POST':
-        form = BookForm(request.POST, request.FILES)
-        if form.is_valid():
-            book = form.save()
 
-            UserToBook.objects.create(book_id = book.id, user_id = request.user.id)
-            return HttpResponse('')
+@login_required
+@require_http_methods(["POST"])
+def add_book(request):
+    form = BookForm(request.POST, request.FILES)
+    if form.is_valid():
+        book = form.save()
+        UserToBook.objects.create(book_id = book.id, user_id = request.user.id)
+        return HttpResponse('')
     else:
-        #TODO Error handling
-        return HttpResponse(status=400)
+        if (request.POST['title'] == ""):
+            return HttpResponse("Title should not be empty", status=400)
+        elif (request.POST['description'] == ""):
+            return HttpResponse("Description should not be empty", status=400)
+        else:
+            return HttpResponse("Error occured", status=400)

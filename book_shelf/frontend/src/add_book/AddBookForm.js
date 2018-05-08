@@ -46,7 +46,9 @@ class AddBookForm extends React.Component {
           <div className="container">
             <div className="row">
               <div className="col-xs-12 col-md-12 col-lg-3 col-xl-3">
-                <h4><i className="fas fa-heading"></i> Book title</h4>
+                <h4>
+                  <i className="fas fa-heading"></i> Book title<p className="text-danger d-inline">*</p>
+                </h4>
               </div>
               <div className="col-xs-12 col-md-12 col-lg-9 col-xl-9">
                 <input type="text" onChange={this.titleChangedHandler} className="form-control" placeholder="Title..." />
@@ -55,7 +57,9 @@ class AddBookForm extends React.Component {
 
             <div className="row mt-3">
               <div className="col-xs-12 col-md-12 col-lg-3 col-xl-3">
-                <h4><i className="fas fa-keyboard"></i> Book description</h4>
+                <h4>
+                  <i className="fas fa-keyboard"></i> Book description<p className="text-danger d-inline">*</p>
+                </h4>
               </div>
               <div className="col-xs-12 col-md-12 col-lg-9 col-xl-9">
                 <textarea onChange={this.descriptionChangedHandler} className="form-control" rows="3" placeholder="Description..."></textarea>

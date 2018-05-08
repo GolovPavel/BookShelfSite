@@ -16,8 +16,8 @@ const Pagination = ({ num_pages, current_page, onChangePage }) =>
                   <PaginationPage
                     key={idx}
                     page_num={idx}
-                    isActive={(idx == current_page) ? true : false}
-                    onChangePage={(idx == current_page) ? (f=>f) : onChangePage} />
+                    isActive={(idx === current_page) ? true : false}
+                    onChangePage={(idx === current_page) ? (f=>f) : onChangePage} />
                 ) :
               <p></p>
           }

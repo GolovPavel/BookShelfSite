@@ -33,7 +33,7 @@ class AddNoteForm extends React.Component {
       const title = this.state.titleState;
       const note_text = draftToHtml(convertToRaw(this.state.editorState.getCurrentContent()));
 
-      if (note_text == '<p></p>\n') {
+      if (note_text === '<p></p>\n') {
         return;
       }
 

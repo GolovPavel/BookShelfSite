@@ -10,7 +10,9 @@ class BookAddApp extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      is_loading: false,
+      isSuccess: false,
+      isError: false,
+      errorMessage: "",
     }
     this.onAddBook = this.onAddBook.bind(this);
   }
@@ -24,14 +26,29 @@ class BookAddApp extends Component {
       },
       body: formData,
     })
-      .then(response => console.log(response.status))
+      .then(response => {
+        (response.status === 200) ?
+          this.setState({
+            isSuccess: true,
+            isError: false,
+          }) :
+          this.setState({
+            isError: true,
+            isSuccess: false,
+          })
+
+          return response.text();
+      }).then(text => this.setState({errorMessage: text}));
   }
 
   render() {
     return (
       <PageTemplate>
         <BookAddContainer
-          onAddBook={this.onAddBook} />
+          onAddBook={this.onAddBook}
+          isSuccess={this.state.isSuccess}
+          isError={this.state.isError}
+          errorMessage={this.state.errorMessage} />
       </PageTemplate>
     );
   }

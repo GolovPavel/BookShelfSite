@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 const PaginationPage = ({ page_num, isActive, onChangePage }) =>
     <li className={(isActive) ? "page-item active" : "page-item"}>
-      <a onClick={() => onChangePage(page_num)} className="page-link" href="#">
+      <a onClick={() => onChangePage(page_num)} className="page-link">
         {page_num}
       </a>
     </li>
