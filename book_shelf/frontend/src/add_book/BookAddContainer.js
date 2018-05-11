@@ -13,7 +13,9 @@ const BookAddContainer = ({ onAddBook, isSuccess, isError, errorMessages }) =>
         <h1><i className="fas fa-plus"></i> Add new book</h1>
       </div>
       <div className="alert alert-success successMessage" style={{display: isSuccess ? 'block' : 'none' }} role="alert">
-        The book was added successfully!
+        <p>
+          <i className="fas fa-check-circle"></i> The book was added successfully!
+        </p>
       </div>
       <div className="alert alert-danger" style={{display: isError ? 'block' : 'none' }} role="alert">
         {errorMessages.map((error, idx) =>

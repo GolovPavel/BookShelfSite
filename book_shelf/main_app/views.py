@@ -4,7 +4,7 @@ from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_http_methods
 from django.db.models.functions import Coalesce
-from django.core.paginator import Paginator
+from django.core.paginator import Paginator,  EmptyPage
 from django.core import serializers
 from django.core.files.storage import default_storage
 
