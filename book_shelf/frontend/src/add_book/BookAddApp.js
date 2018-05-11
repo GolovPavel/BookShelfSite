@@ -5,6 +5,7 @@ import BookAddContainer from './BookAddContainer';
 
 import fetch from 'isomorphic-fetch';
 import Cookie from 'js-cookie';
+import voca from 'voca';
 
 class BookAddApp extends Component {
   constructor(props) {
@@ -12,7 +13,7 @@ class BookAddApp extends Component {
     this.state = {
       isSuccess: false,
       isError: false,
-      errorMessage: "",
+      errorMessages: [],
     }
     this.onAddBook = this.onAddBook.bind(this);
   }
@@ -37,8 +38,17 @@ class BookAddApp extends Component {
             isSuccess: false,
           })
 
-          return response.text();
-      }).then(text => this.setState({errorMessage: text}));
+          return response.json();
+      }).then(json => {
+        const errorMessages = Object
+          .keys(json)
+          .map(key => ({
+            'field': voca.titleCase(key),
+            'message': json[key][0].message,
+          }));
+
+        this.setState({errorMessages});
+      });
   }
 
   render() {
@@ -48,7 +58,7 @@ class BookAddApp extends Component {
           onAddBook={this.onAddBook}
           isSuccess={this.state.isSuccess}
           isError={this.state.isError}
-          errorMessage={this.state.errorMessage} />
+          errorMessages={this.state.errorMessages} />
       </PageTemplate>
     );
   }

@@ -22,7 +22,7 @@ from main_app.models import UserToBook
 from django.contrib.contenttypes.models import ContentType
 import json
 from . import constants
-from .forms import BookForm
+from .forms import BookForm, NoteForm
 
 #Caching models content types
 notes_content_id = ContentType.objects.get_for_model(Note).id
@@ -132,9 +132,5 @@ def add_book(request):
         UserToBook.objects.create(book_id = book.id, user_id = request.user.id)
         return HttpResponse('')
     else:
-        if (request.POST['title'] == ""):
-            return HttpResponse("Title should not be empty", status=400)
-        elif (request.POST['description'] == ""):
-            return HttpResponse("Description should not be empty", status=400)
-        else:
-            return HttpResponse("Error occured", status=400)
+        print(form.errors.as_json())
+        return HttpResponse(form.errors.as_json(), status=400)
