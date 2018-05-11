@@ -45,12 +45,8 @@ class BookPageApp extends Component {
       }));
   }
 
-  onAddNote(title, note_text) {
-    const jsonData = {
-      title,
-      note_text,
-      book_id: this.state.book_id,
-    };
+  onAddNote(formData) {
+    formData.append('book_id', this.state.book_id);
 
     fetch("/api/note/add_note", {
       credentials: 'same-origin',
@@ -58,15 +54,15 @@ class BookPageApp extends Component {
       headers: {
         'X-CSRFToken': Cookie.get("csrftoken"),
       },
-      body: JSON.stringify(jsonData),
+      body: formData,
     })
       .then(response => {
         if (response.status === 200) {
           this.setState({
             notes: [
               {
-                title,
-                note_text,
+                title: formData.get('title'),
+                note_text: formData.get('note_text'),
                 likes_count: 0,
               },
               ...this.state.notes,

@@ -11,6 +11,7 @@ import '../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 class AddNoteForm extends React.Component {
     constructor(props) {
       super(props);
+      this.emptyEditorState = '<p></p>\n';
       this.state = {
         titleState: "",
         editorState: EditorState.createEmpty(),
@@ -33,11 +34,15 @@ class AddNoteForm extends React.Component {
       const title = this.state.titleState;
       const note_text = draftToHtml(convertToRaw(this.state.editorState.getCurrentContent()));
 
-      if (note_text === '<p></p>\n') {
+      if (note_text === this.emptyEditorState) {
         return;
       }
 
-      this.props.onAddNote(title, note_text);
+      const fd = new FormData();
+      fd.append('title', title);
+      fd.append('note_text', note_text);
+
+      this.props.onAddNote(fd);
 
       const editorState = EditorState.push(this.state.editorState, ContentState.createFromText(''));
       this.setState({

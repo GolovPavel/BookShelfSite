@@ -106,21 +106,23 @@ def get_book_by_id(request, book_id):
 @login_required
 @require_http_methods(["POST"])
 def add_note(request):
-    note_data = json.loads(request.body)
+    form = NoteForm(request.POST);
+    if form.is_valid():
+        title = form.cleaned_data['title']
+        note_text = form.cleaned_data['note_text']
+        book_id = form.cleaned_data['book_id']
 
-    if note_data['title'] == '':
-        note_data['title'] = 'Not titled'
-    if note_data['note_text'] == constants.NOTE_EMPTY_TEXT:
-        return HttpResponse('Note text should not be empty', status=400)
+        Note.objects.create(
+            title = title,
+            note_text = note_text,
+            book_id = book_id,
+            user_id = request.user.id
+        )
 
-    Note.objects.create(
-        title = note_data['title'],
-        note_text = note_data['note_text'],
-        book_id = note_data['book_id'],
-        user_id = request.user.id
-    )
+        return HttpResponse('')
+    else:
+        return HttpResponse(form.errors.as_json(), status=400)
 
-    return HttpResponse('')
 
 
 @login_required
@@ -132,5 +134,4 @@ def add_book(request):
         UserToBook.objects.create(book_id = book.id, user_id = request.user.id)
         return HttpResponse('')
     else:
-        print(form.errors.as_json())
         return HttpResponse(form.errors.as_json(), status=400)
