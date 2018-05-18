@@ -12,5 +12,7 @@ urlpatterns = [
     path('api/book/add_book/', views.add_book),
 
     path('api/note/add_note', views.add_note),
+    path('api/note/add_like', views.add_like_to_note),
+    path('api/note/delete_like', views.delete_like_from_note),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) \
   + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

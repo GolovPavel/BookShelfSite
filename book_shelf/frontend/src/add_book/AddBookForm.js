@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
+
 import '../css/add_book/AddBookForm.css';
 
 class AddBookForm extends React.Component {
@@ -45,32 +47,32 @@ class AddBookForm extends React.Component {
         <form className="AddBookForm">
           <div className="container">
             <div className="row">
-              <div className="col-xs-12 col-md-12 col-lg-3 col-xl-3">
+              <div className="col-xs-12 col-md-12 col-lg-4 col-xl-3">
                 <h4>
-                  <i className="fas fa-heading"></i> Book title<p className="text-danger d-inline">*</p>
+                  <FontAwesomeIcon icon="heading" />  Book title<p className="text-danger d-inline">*</p>
                 </h4>
               </div>
-              <div className="col-xs-12 col-md-12 col-lg-9 col-xl-9">
+              <div className="col-xs-12 col-md-12 col-lg-8 col-xl-9">
                 <input type="text" onChange={this.titleChangedHandler} className="form-control" placeholder="Title..." />
               </div>
             </div>
 
             <div className="row mt-3">
-              <div className="col-xs-12 col-md-12 col-lg-3 col-xl-3">
+              <div className="col-xs-12 col-md-12 col-lg-4 col-xl-3">
                 <h4>
-                  <i className="fas fa-keyboard"></i> Book description<p className="text-danger d-inline">*</p>
+                  <FontAwesomeIcon icon="keyboard" /> Book description<p className="text-danger d-inline">*</p>
                 </h4>
               </div>
-              <div className="col-xs-12 col-md-12 col-lg-9 col-xl-9">
+              <div className="col-xs-12 col-md-12 col-lg-8 col-xl-9">
                 <textarea onChange={this.descriptionChangedHandler} className="form-control" rows="3" placeholder="Description..."></textarea>
               </div>
             </div>
 
             <div className="row mt-3">
-              <div className="col-xs-12 col-md-12 col-lg-3 col-xl-3">
-                <h4><i className="fas fa-image"></i> Book picture</h4>
+              <div className="col-xs-12 col-md-12 col-lg-4 col-xl-3">
+                <h4><FontAwesomeIcon icon="image" /> Book picture</h4>
               </div>
-              <div className="col-xs-12 col-md-12 col-lg-9 col-xl-9">
+              <div className="col-xs-12 col-md-12 col-lg-8 col-xl-9">
                 <input
                   style={{display: 'none'}}
                   type="file" className="form-control-file"

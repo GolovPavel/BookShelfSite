@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 import BooksList from './BooksList';
 import Pagination from './Pagination';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import '../css/Container.css';
 
 const BooksContainer = ({books, num_pages, current_page, is_loading, onChangePage}) =>
@@ -12,7 +13,7 @@ const BooksContainer = ({books, num_pages, current_page, is_loading, onChangePag
         (is_loading) ?
           <div className="row">
             <div className="loading col-12 d-flex justify-content-center">
-              <i className="loadingGif fas fa-spinner fa-pulse fa-7x"></i>
+              <FontAwesomeIcon icon="spinner" pulse size="7x" className="loadingGif"/>
             </div>
           </div> :
           <div className="loadedBooks">

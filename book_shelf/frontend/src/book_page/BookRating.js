@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
+
 import _ from 'lodash';
 
 const BookRating = ({rating}) =>
@@ -9,8 +11,8 @@ const BookRating = ({rating}) =>
     {
       _.range(1, 6).map((elem, idx) =>
         (elem <= Math.round(rating)) ?
-          <i key={idx} className="fas fa-star"></i> :
-          <i key={idx} className="far fa-star"></i>
+          <FontAwesomeIcon icon="star" key={idx}/> :
+          <FontAwesomeIcon icon={["far", "star"]} key={idx} />
       )
     }
   </h5>

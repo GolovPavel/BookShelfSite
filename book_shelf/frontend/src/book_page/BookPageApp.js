@@ -17,6 +17,8 @@ class BookPageApp extends Component {
     }
 
     this.onAddNote = this.onAddNote.bind(this);
+    this.onAddLikeToNote = this.onAddLikeToNote.bind(this);
+    this.onDeleteLikeFromNote = this.onDeleteLikeFromNote.bind(this);
   }
 
   componentWillMount() {
@@ -58,18 +60,58 @@ class BookPageApp extends Component {
     })
       .then(response => {
         if (response.status === 200) {
-          this.setState({
-            notes: [
-              {
-                title: formData.get('title'),
-                note_text: formData.get('note_text'),
-                likes_count: 0,
-              },
-              ...this.state.notes,
-            ]
-          })
+          this.updateNotes();
         }
       });
+  }
+
+  onAddLikeToNote(noteID) {
+    this.setState({
+      notes: this.state.notes.map(elem => {
+        if (elem.id === noteID) {
+          elem.likes_count += 1;
+          elem.liked = 1;
+        }
+        return elem;
+      })
+    })
+
+    const formData = new FormData();
+    formData.append('object_id', noteID);
+
+
+    fetch("/api/note/add_like", {
+      credentials: 'same-origin',
+      method: 'POST',
+      headers: {
+        'X-CSRFToken': Cookie.get("csrftoken"),
+      },
+      body: formData,
+    });
+  }
+
+  onDeleteLikeFromNote(noteID) {
+    this.setState({
+      notes: this.state.notes.map(elem => {
+        if (elem.id === noteID) {
+          elem.liked = 0;
+          elem.likes_count -= 1;
+        }
+        return elem;
+      })
+    })
+
+    const formData = new FormData();
+    formData.append('object_id', noteID);
+
+    fetch("/api/note/delete_like", {
+      credentials: 'same-origin',
+      method: 'POST',
+      headers: {
+        'X-CSRFToken': Cookie.get("csrftoken"),
+      },
+      body: formData,
+    });
   }
 
 
@@ -79,6 +121,8 @@ class BookPageApp extends Component {
         <BookContainer
           book={this.state.book}
           notes={this.state.notes}
+          onAddLikeToNote={this.onAddLikeToNote}
+          onDeleteLikeFromNote={this.onDeleteLikeFromNote}
           is_loading={this.state.is_loading}
           onAddNote={this.onAddNote}/>
       </PageTemplate>

@@ -10,6 +10,7 @@ from django.core.files.storage import default_storage
 
 from django.db.models import Avg
 from django.db.models import Count
+from django.db.models import Q
 
 
 from django.contrib.auth.models import User
@@ -22,10 +23,10 @@ from main_app.models import UserToBook
 from django.contrib.contenttypes.models import ContentType
 import json
 from . import constants
-from .forms import BookForm, NoteForm
+from .forms import BookForm, NoteForm, NoteLikeForm
 
 #Caching models content types
-notes_content_id = ContentType.objects.get_for_model(Note).id
+NOTES_CONTENT_TYPE_ID = ContentType.objects.get_for_model(Note).id
 
 
 def index(request):
@@ -90,7 +91,9 @@ def get_book_by_id(request, book_id):
         .note_set \
         .filter(user_id=request.user.id) \
         .annotate(likes_count = Count('likes')) \
-        .values('title', 'note_text', 'likes_count')
+        .annotate(liked = Count('likes', filter=Q(user_id=request.user.id))) \
+        .values('id', 'title', 'note_text', 'likes_count', 'liked')
+
 
     response = {
         'book': list(
@@ -135,3 +138,52 @@ def add_book(request):
         return HttpResponse('')
     else:
         return HttpResponse(form.errors.as_json(), status=400)
+
+
+@login_required
+@require_http_methods(["POST"])
+def add_like_to_note(request):
+    form = NoteLikeForm(request.POST)
+    if form.is_valid():
+        object_id = form.cleaned_data['object_id']
+        user_id = request.user.id
+        like = Like.objects.filter(
+            object_id = object_id,
+            from_user_id = user_id,
+            content_type_id = NOTES_CONTENT_TYPE_ID
+        )
+
+        if like.exists():
+            return HttpResponse('This user already liked this object', status=400)
+        else:
+            like = Like(
+                object_id = object_id,
+                from_user_id = user_id,
+                content_type_id = NOTES_CONTENT_TYPE_ID,
+            )
+            like.save()
+            return HttpResponse('')
+    else:
+        return HttpResponse('Bad formdata recieved', status=400)
+
+
+@login_required
+@require_http_methods(["POST"])
+def delete_like_from_note(request):
+    form = NoteLikeForm(request.POST)
+    if form.is_valid():
+        object_id = form.cleaned_data['object_id']
+        user_id = request.user.id
+        like = Like.objects.filter(
+            object_id = object_id,
+            from_user_id = user_id,
+            content_type_id = NOTES_CONTENT_TYPE_ID
+        )
+
+        if like.exists():
+            like.delete()
+            return HttpResponse('')
+        else:
+            return HttpResponse('This like from this user does not exist', status=400)
+    else:
+        return HttpResponse('Bad formdata recieved', status=400)

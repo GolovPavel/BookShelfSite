@@ -29,3 +29,6 @@ class NoteForm(forms.Form):
             raise forms.ValidationError(constants.NOTE_TEXT_EMPTY_ERROR)
         else:
             return data
+
+class NoteLikeForm(forms.Form):
+    object_id = forms.IntegerField()

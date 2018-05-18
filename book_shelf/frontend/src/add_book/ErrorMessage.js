@@ -1,10 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
+
 const ErrorMessage = ({ error }) =>
   <div className="errorMessage">
     <p>
-      <i className="fas fa-exclamation"></i> <b>{error.field}</b>: {error.message}
+      <FontAwesomeIcon icon="exclamation" /> <b>{error.field}</b>: {error.message}
     </p>
   </div>
 

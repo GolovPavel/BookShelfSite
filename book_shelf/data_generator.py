@@ -244,36 +244,36 @@ def get_unique_username():
 
 
 def generate_data(count = 1000):
-    # delete_all_data()
+    delete_all_data()
 
-    start_all = time.time()
+        start_all = time.time()
 
-    start_time = time.time()
-    users = generate_users(count)
-    print("--- %s seconds ---" % (time.time() - start_time))
+        start_time = time.time()
+        users = generate_users(count)
+        print("--- %s seconds ---" % (time.time() - start_time))
 
-    start_time = time.time()
-    books = generate_books(count)
-    print("--- %s seconds ---" % (time.time() - start_time))
+        start_time = time.time()
+        books = generate_books(count)
+        print("--- %s seconds ---" % (time.time() - start_time))
 
-    start_time = time.time()
-    notes = generate_notes(count, users, books)
-    print("--- %s seconds ---" % (time.time() - start_time))
+        start_time = time.time()
+        notes = generate_notes(count, users, books)
+        print("--- %s seconds ---" % (time.time() - start_time))
 
-    start_time = time.time()
-    comments = generate_comments(count, users, books, notes)
-    print("--- %s seconds ---" % (time.time() - start_time))
+        start_time = time.time()
+        comments = generate_comments(count, users, books, notes)
+        print("--- %s seconds ---" % (time.time() - start_time))
 
-    start_time = time.time()
-    generate_likes(count, users, notes, comments)
-    print("--- %s seconds ---" % (time.time() - start_time))
+        start_time = time.time()
+        generate_likes(count, users, notes, comments)
+        print("--- %s seconds ---" % (time.time() - start_time))
 
-    start_time = time.time()
-    generate_bookRating(count, users, books)
-    print("--- %s seconds ---" % (time.time() - start_time))
+        start_time = time.time()
+        generate_bookRating(count, users, books)
+        print("--- %s seconds ---" % (time.time() - start_time))
 
-    start_time = time.time()
-    generate_userToBook(count, users, books)
-    print("--- %s seconds ---" % (time.time() - start_time))
+        start_time = time.time()
+        generate_userToBook(count, users, books)
+        print("--- %s seconds ---" % (time.time() - start_time))
 
-    print("Data generating finished. Total time %s seconds" % (time.time() - start_all))
+        print("Data generating finished. Total time %s seconds" % (time.time() - start_all))
