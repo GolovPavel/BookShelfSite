@@ -101,6 +101,8 @@ class Book(models.Model):
             models.Index(fields=['is_public']),
         ]
 
+        ordering = ["created_at"]
+
         verbose_name = "Book"
         verbose_name_plural = "Books"
 
