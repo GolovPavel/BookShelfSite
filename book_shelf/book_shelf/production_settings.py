@@ -1,4 +1,4 @@
-from book_shelf.settings import *
+from .settings import *
 
 WEBPACK_LOADER = {
     'DEFAULT': {
