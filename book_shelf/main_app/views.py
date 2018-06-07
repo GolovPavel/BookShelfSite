@@ -9,7 +9,7 @@ from django.core import serializers
 from django.core.files.storage import default_storage
 
 from django.db.models import Avg
-from django.db.models import Count
+from django.db.models import Count, Case, When
 from django.db.models import Q
 
 
@@ -90,9 +90,21 @@ def get_book_by_id(request, book_id):
     notes = book.get(id=book_id) \
         .note_set \
         .filter(user_id=request.user.id) \
-        .annotate(likes_count = Count('likes')) \
-        .annotate(liked = Count('likes', filter=Q(user_id=request.user.id))) \
-        .values('id', 'title', 'note_text', 'likes_count', 'liked')
+        .annotate(likes_count = Count('likes', distinct = True)) \
+        .values('id', 'title', 'note_text', 'likes_count')
+
+    notes = list(notes)
+
+    for note in notes:
+        like = Like.objects.filter(
+            object_id=note['id'],
+            content_type_id = NOTES_CONTENT_TYPE_ID,
+            from_user_id = request.user.id
+        )
+        if like.exists():
+            note['liked'] = 1
+        else:
+            note['liked'] = 0
 
 
     response = {
@@ -100,7 +112,7 @@ def get_book_by_id(request, book_id):
             book.filter(id=book_id) \
                 .values('title', 'description', 'picture', 'rating')
         ),
-        'notes': list(notes),
+        'notes': notes,
     }
 
     return JsonResponse(response)
@@ -146,7 +158,9 @@ def add_like_to_note(request):
     form = NoteLikeForm(request.POST)
     if form.is_valid():
         object_id = form.cleaned_data['object_id']
+
         user_id = request.user.id
+
         like = Like.objects.filter(
             object_id = object_id,
             from_user_id = user_id,

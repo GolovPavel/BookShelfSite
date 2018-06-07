@@ -2,6 +2,7 @@ from django.urls import include, path
 from . import views
 from django.conf.urls.static import static
 from django.conf import settings
+
 urlpatterns = [
     path('', views.index, name = 'index'),
 
@@ -14,5 +15,4 @@ urlpatterns = [
     path('api/note/add_note', views.add_note),
     path('api/note/add_like', views.add_like_to_note),
     path('api/note/delete_like', views.delete_like_from_note),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) \
-  + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+]

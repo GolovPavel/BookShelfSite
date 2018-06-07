@@ -16,7 +16,7 @@ const BookNote = ({note, onAddLikeToNote, onDeleteLikeFromNote}) =>
         </div>
         <div className="card-text text-right">
           {
-            (note.liked === 1) ?
+            (note.liked !== 0) ?
               <div onClick={() => onDeleteLikeFromNote(note.id)} className="d-inline-block">
                 <FontAwesomeIcon icon="heart" className="hov"/>
               </div> :
