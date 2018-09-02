@@ -4,6 +4,7 @@ Repository for my own bookshelf project for development of Internet applications
 Project technologies:
 1. Django 2.0.2;
 2. MySQL database;
+3. React;
 ***
 ## How to configure project?
 First, you should create virtual environment and download all packages from `requirements.txt` file.
